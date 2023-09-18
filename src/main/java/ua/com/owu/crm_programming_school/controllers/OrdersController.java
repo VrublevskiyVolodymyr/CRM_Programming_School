@@ -16,7 +16,7 @@ import ua.com.owu.crm_programming_school.models.OrderPaginated;
 import ua.com.owu.crm_programming_school.services.OrderService;
 
 @RestController
-@RequestMapping("/api/v1/orders")
+@RequestMapping("/orders")
 @Tag(name="orders")
 public class OrdersController {
 

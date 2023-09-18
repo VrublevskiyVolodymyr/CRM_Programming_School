@@ -134,8 +134,25 @@
 				{
 					"name": "swagger",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/swagger-ui.html#/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"swagger-ui.html"
+							],
+							"hash": "/"
+						}
 					},
 					"response": []
 				},
@@ -143,7 +160,21 @@
 					"name": "docs",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/v3/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"v3",
+								"api-docs"
+							]
+						}
 					},
 					"response": []
 				}

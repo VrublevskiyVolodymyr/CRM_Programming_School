@@ -33,11 +33,11 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(HttpMethod.POST,"/api/v1/auth","/api/v1/auth/refresh","/api/v1/auth/activate/{token}").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/auth","/auth/refresh","/auth/activate/{token}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/api/v1/doc/**", "/swagger-ui/**", "/webjars/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/admin/users").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/admin/users/{id}/re_token").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority("MANAGER", "ADMIN"))
+                                .requestMatchers(HttpMethod.POST, "/admin/users").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/admin/users/{id}/re_token").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyAuthority("MANAGER", "ADMIN"))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

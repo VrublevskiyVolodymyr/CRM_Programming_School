@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import ua.com.owu.crm_programming_school.models.*;
 import ua.com.owu.crm_programming_school.services.AuthenticationService;
 
 @RestController
-@RequestMapping(value = "/api/v1/auth")
+@RequestMapping(value = "/auth")
 @AllArgsConstructor
 @Tag(name="auth")
 public class AuthenticationController {
@@ -27,7 +28,7 @@ public class AuthenticationController {
                             description = "success",
                             responseCode = "200"
                                     )})
-    public ResponseEntity activate(@PathVariable String token, @RequestBody Password password) {
+    public ResponseEntity activate(@PathVariable String token,  @RequestBody @Valid Password password) {
 
         return authenticationService.activate(token,password);
     }
@@ -43,7 +44,7 @@ public class AuthenticationController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = AuthenticationResponse.class
                                     )))})
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody TokenObtainPair tokenObtainPair) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid TokenObtainPair tokenObtainPair) {
 
         return authenticationService.authenticate(tokenObtainPair);
     }

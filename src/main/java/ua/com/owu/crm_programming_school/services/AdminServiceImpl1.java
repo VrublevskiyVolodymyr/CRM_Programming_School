@@ -17,27 +17,35 @@ public class AdminServiceImpl1 implements AdminService {
     private UserDAO userDAO;
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
-    public ResponseEntity<User> registerManager(User user) {
+    public ResponseEntity<UserResponse> registerManager(UserRequest userRequest) {
         try {
-            if (user == null) {
+            if (userRequest == null) {
                 throw new NullPointerException("User cannot be null");
             }
             User manager = User
                     .builder()
-                    .name(user.getName())
-                    .surname(user.getSurname())
-                    .email(user.getEmail())
+                    .name(userRequest.getName())
+                    .surname(userRequest.getSurname())
+                    .email(userRequest.getEmail())
                     .password(passwordEncoder.encode("1111"))
                     .roles(List.of(Role.MANAGER))
                     .createdAt(LocalDateTime.now().withNano(0))
-                    .isActive(false)
+                    .is_Active(false)
                     .is_staff(true)
                     .is_superuser(false)
                     .build();
 
             User managerSaved = userDAO.save(manager);
 
-            return new ResponseEntity<>(managerSaved , HttpStatus.CREATED);
+            UserResponse userResponse =UserResponse
+                    .builder()
+                    .id(managerSaved.getId())
+                    .name(managerSaved.getName())
+                    .surname(managerSaved.getSurname())
+                    .email(managerSaved.getEmail())
+                    .build();
+
+            return new ResponseEntity<>(userResponse , HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,7 +74,7 @@ public class AdminServiceImpl1 implements AdminService {
                 .password(passwordEncoder.encode("admin"))
                 .roles(List.of(Role.ADMIN))
                 .createdAt(LocalDateTime.now().withNano(0))
-                .isActive(true)
+                .is_Active(true)
                 .is_staff(true)
                 .is_superuser(true)
                 .build();

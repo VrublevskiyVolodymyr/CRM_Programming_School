@@ -51,6 +51,6 @@ Once you have successfully configured the environment variables and installed al
 
 4. **Starting the Server**: Launch the Spring Boot application by clicking the "Run" button in your IDE.
 
-5. **Checking the Application**: The application will be available on port 8080. You can access it by navigating to [http://localhost:8080](http://localhost:8080) in a web browser or using Postman.
+5. **Checking the Application**: The application will be available on port 8080. You can access it by navigating to [http://localhost:8080/api/v1](http://localhost:8080/api/v1) in a web browser or using Postman.
 
-6. **Documentation and API**: For detailed information about the APIs and how to work with the project, please refer to the project documentation by visiting [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) in your web browser.
+6. **Documentation and API**: For detailed information about the APIs and how to work with the project, please refer to the project documentation by visiting [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html) in your web browser.

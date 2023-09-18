@@ -33,7 +33,7 @@ public class AuthenticationService {
                 throw new NullPointerException("User cannot be null");
             }
 
-            user.setActive(true);
+            user.set_Active(true);
             user.setPassword(passwordEncoder.encode(password.getPassword()));
             userDAO.save(user);
 
@@ -92,6 +92,5 @@ public class AuthenticationService {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 }

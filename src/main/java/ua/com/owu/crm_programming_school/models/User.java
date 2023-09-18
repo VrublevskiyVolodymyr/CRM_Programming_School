@@ -2,6 +2,7 @@ package ua.com.owu.crm_programming_school.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,18 +29,21 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
+    @Schema(description = "Unique identifier for the user", readOnly = true)
     private int id;
 
     @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
     @Size(min = 1, max = 20)
+    @Schema(required = true, description = "User's first name", example = "John")
     private String name;
 
     @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
     @Size(min = 1, max = 20)
+    @Schema(required = true, description = "User's last name", example = "Doe")
     private String surname;
 
     @Column(unique = true)
@@ -47,18 +51,18 @@ public class User implements UserDetails {
     @NotBlank(message = "email is a required field")
     @Email
     @Size(min = 1, max = 254)
+    @Schema(required = true, description = "User's email address", example = "john.doe@example.com")
     private String email;
 
     @NotBlank(message = "password cannot be empty")
     @JsonView(value = {Views.Level1.class})
-
-    @Size(min = 8, max = 128, message = "The password must be between 8 and 20 characters long.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$", message = "The password must contain an upper and lower case letter, a number and a special character.")
+    @Size(min = 5, max = 128, message = "The password must be between 5 and 128 characters long.")
+    @Schema(required = true, description = "User's password", example = "Password123!")
     private String password;
 
     @JsonView(value = {Views.Level1.class})
+    @Hidden
     private String refreshToken;
-
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -66,23 +70,28 @@ public class User implements UserDetails {
     @Hidden
     private List<Role> roles;
 
+    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @Schema(description = "Is user active", readOnly = true)
+    private boolean is_Active;
 
     @JsonView(value = {Views.Level1.class,Views.Level2.class})
-    private boolean isActive;
-
-    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @Schema(description = "Is user a superuser", readOnly = true)
     private Boolean is_superuser;
 
     @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @Schema(description = "Is user staff", readOnly = true)
     private Boolean is_staff;
 
     @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @Schema(description = "User create date", readOnly = true)
     private LocalDateTime createdAt;
 
     @JsonView(value = {Views.Level1.class})
+    @Schema(description = "User update date", readOnly = true)
     private LocalDateTime updatedAt;
 
     @JsonView(value = {Views.Level1.class})
+    @Schema(description = "User last login date", readOnly = true)
     private LocalDateTime lastLogin;
 
     public User(String name, String surname, String email) {
@@ -117,7 +126,7 @@ public class User implements UserDetails {
     @Override
     @Hidden
     public boolean isAccountNonLocked() {
-        return this.isActive;
+        return this.is_Active;
     }
 
     @Override

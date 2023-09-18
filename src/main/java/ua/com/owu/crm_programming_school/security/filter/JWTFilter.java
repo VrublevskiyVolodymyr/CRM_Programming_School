@@ -33,7 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");// Bearer tokenEMAILtoken
+        String authorizationHeader = request.getHeader("Authorization");
 
         try {
             if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
