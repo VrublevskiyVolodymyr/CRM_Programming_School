@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"refreshToken\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2NjM3OUBnbWFpbC5jb20iLCJpYXQiOjE2OTA5MTg4NjQsImV4cCI6MTY5MDkyMjQ2NH0.AmAISlS5x0UUE6cHYFipRJGu3BtO5crV7BbMEKQucM0\"\r\n}",
+							"raw": "{\r\n    \"refresh\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTUwNDM2NDcsImV4cCI6MTY5NTA0NzI0N30.oRo9O8CidFHcP8tQucNtGIuusjLlvcUD1oUgH-Dl8pw\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,8 +73,35 @@
 				{
 					"name": "activate user",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"Mykol@1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/activate/eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJteWtvbGFAZ21haWwuY29tIiwiaWF0IjoxNjk1MDM4NTY1LCJleHAiOjE2OTUwNDAwNjV9.uKayMcDTijudnTqkNX-gBFXw7Da-c0d4G0Yb0SIs7Co",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"activate",
+								"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJteWtvbGFAZ21haWwuY29tIiwiaWF0IjoxNjk1MDM4NTY1LCJleHAiOjE2OTUwNDAwNjV9.uKayMcDTijudnTqkNX-gBFXw7Da-c0d4G0Yb0SIs7Co"
+							]
+						}
 					},
 					"response": []
 				}
@@ -86,8 +113,27 @@
 				{
 					"name": "create user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTUwMzg1MjQsImV4cCI6MTY5NTA0MDAyNH0.mVeDxbywNx_W6rPBdWobzl4Ggzgn63U_nu-gcShwMu4",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mykola\",\r\n    \"surname\": \"Mykolayovych\",\r\n    \"email\": \"mykola@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/api/v1/admin/users",
 							"protocol": "http",
@@ -108,8 +154,34 @@
 				{
 					"name": "re_token",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTUwMzgwNTQsImV4cCI6MTY5NTAzOTU1NH0.FGlaxtIC-HQJz7u6noclPhOXSLEc9k0f1jL_c-pzf8M",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/admin/users/2/re_token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users",
+								"2",
+								"re_token"
+							]
+						}
 					},
 					"response": []
 				}
@@ -121,8 +193,41 @@
 				{
 					"name": "get all orders",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTUwNDM2ODcsImV4cCI6MTY5NTA0NTE4N30.k20T_eSJjj30-frTpIIM1IACO7McPBCCXXKSTVNaiMY",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders?page=2&order=id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "order",
+									"value": "id"
+								}
+							]
+						}
 					},
 					"response": []
 				}

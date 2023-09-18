@@ -20,8 +20,8 @@ public class TokenObtainPair {
     private String username;
 
     @NotBlank(message = "password is a required field")
-    @Size(min = 5, max = 128, message = "The password must be between 5 and 128 characters long.")
-    @Pattern(regexp = "^(?=.*[a-zA-Zа-яА-ЯЇЁіІё])(?=.*\\d)(?=.*[@#$%^&+=!]).*$|^admin$", message = "The password must contain an upper and lower case letter, a number and a special character.")
+    @Size(min = 5, max = 128, message = "wrong login or password")
+    @Pattern(regexp = "^(?=.*[a-zA-Zа-яА-ЯЇЁіІё])(?=.*\\d)(?=.*[@#$%^&+=!]).*$|^admin$", message = "wrong login or password.")
     @Schema(description = "User's password", example = "Password123!")
     private String password;
 }
