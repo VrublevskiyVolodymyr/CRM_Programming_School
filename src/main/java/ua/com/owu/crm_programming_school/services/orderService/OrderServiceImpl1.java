@@ -1,4 +1,4 @@
-package ua.com.owu.crm_programming_school.services;
+package ua.com.owu.crm_programming_school.services.orderService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,8 +20,6 @@ public class OrderServiceImpl1 implements OrderService {
 
     public ResponseEntity<OrderPaginated> getAllOrders(int page, String order, int size) {
 
-        System.out.println("page1: " + page);
-
         Sort.Direction sortDirection = Sort.Direction.ASC;
         String sortBy;
 
@@ -39,8 +37,6 @@ public class OrderServiceImpl1 implements OrderService {
         int maxPage = (int) Math.ceil((double) totalRecords / size);
         int originalPage = page;
 
-        System.out.println("maxPage: " + maxPage);
-
         if (page > maxPage) {
             page = maxPage;
         }
@@ -48,7 +44,6 @@ public class OrderServiceImpl1 implements OrderService {
             page = 1;
 
         }
-        System.out.println("page2: " + page);
 
         Pageable pageable = PageRequest.of(page-1, size, sortDirection, sortBy);
 
@@ -60,12 +55,6 @@ public class OrderServiceImpl1 implements OrderService {
         orderPaginated.setPrev(originalPage > 1 ? generatePageUrlPrev(originalPage - 1, order, maxPage) : null);
         orderPaginated.setNext(originalPage < maxPage? generatePageUrlNext(originalPage + 1, order, maxPage) : null);
         orderPaginated.setItems(orders.getContent());
-
-        // Виведення параметрів для налагодження та перевірка параметру sortBy
-        System.out.println("page: " + originalPage);
-        System.out.println("size: " + size);
-        System.out.println("orderBy: " + order);
-        System.out.println("sortBy: " + sortBy);
 
         return new ResponseEntity<>(orderPaginated, HttpStatus.OK);
     }

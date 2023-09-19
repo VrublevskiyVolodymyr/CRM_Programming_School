@@ -1,25 +1,32 @@
 package ua.com.owu.crm_programming_school.controllers;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ua.com.owu.crm_programming_school.models.*;
-import ua.com.owu.crm_programming_school.services.AuthenticationService;
+import ua.com.owu.crm_programming_school.services.authenticationService.AuthenticationService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/auth")
-@AllArgsConstructor
 @Tag(name="auth")
 public class AuthenticationController {
     private AuthenticationService authenticationService;
 
+
+    public AuthenticationController(@Qualifier("authenticationServiceImpl1") AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/activate/{token}")
     @Operation(description = "Activate user",
@@ -58,9 +65,12 @@ public class AuthenticationController {
                             responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = AuthenticationResponse.class)))})
-    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody RequestRefresh requestRefresh) {
+                                    schema = @Schema(implementation = AuthenticationResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Token is not valid",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseError.class)))})
+    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody RequestRefresh requestRefresh, HttpServletResponse response) throws IOException {
 
-        return authenticationService.refresh(requestRefresh);
+        return authenticationService.refresh(requestRefresh,response);
     }
 }

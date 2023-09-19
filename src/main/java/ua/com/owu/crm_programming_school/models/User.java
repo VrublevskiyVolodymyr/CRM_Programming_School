@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.com.owu.crm_programming_school.views.Views;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,18 +29,18 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     @Schema(description = "Unique identifier for the user", readOnly = true)
     private int id;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
     @Size(min = 1, max = 20)
     @Schema(required = true, description = "User's first name", example = "John")
     private String name;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
     @Size(min = 1, max = 20)
@@ -47,7 +48,7 @@ public class User implements UserDetails {
     private String surname;
 
     @Column(unique = true)
-    @JsonView(value = {Views.Level1.class,Views.Level2.class,Views.Level3.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     @NotBlank(message = "email is a required field")
     @Email
     @Size(min = 1, max = 254)
@@ -70,29 +71,30 @@ public class User implements UserDetails {
     @Hidden
     private List<Role> roles;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "Is user active", readOnly = true)
-    private boolean is_Active;
+    private boolean is_active;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "Is user a superuser", readOnly = true)
     private Boolean is_superuser;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "Is user staff", readOnly = true)
     private Boolean is_staff;
 
-    @JsonView(value = {Views.Level1.class,Views.Level2.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "User create date", readOnly = true)
     private LocalDateTime createdAt;
 
-    @JsonView(value = {Views.Level1.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "User update date", readOnly = true)
     private LocalDateTime updatedAt;
 
-    @JsonView(value = {Views.Level1.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Schema(description = "User last login date", readOnly = true)
     private LocalDateTime lastLogin;
+
 
     public User(String name, String surname, String email) {
         this.name = name;
@@ -126,7 +128,7 @@ public class User implements UserDetails {
     @Override
     @Hidden
     public boolean isAccountNonLocked() {
-        return this.is_Active;
+        return this.is_active;
     }
 
     @Override

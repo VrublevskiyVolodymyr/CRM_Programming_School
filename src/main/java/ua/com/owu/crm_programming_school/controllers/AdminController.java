@@ -1,6 +1,5 @@
 package ua.com.owu.crm_programming_school.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ua.com.owu.crm_programming_school.models.ResponseAccess;
-import ua.com.owu.crm_programming_school.models.User;
 import ua.com.owu.crm_programming_school.models.UserRequest;
 import ua.com.owu.crm_programming_school.models.UserResponse;
-import ua.com.owu.crm_programming_school.services.AdminService;
-import ua.com.owu.crm_programming_school.views.Views;
+import ua.com.owu.crm_programming_school.services.adminService.AdminService;
 
 @RestController
 @Tag(name="admin")

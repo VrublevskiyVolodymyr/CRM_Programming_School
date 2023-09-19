@@ -1,4 +1,4 @@
-package ua.com.owu.crm_programming_school.services;
+package ua.com.owu.crm_programming_school.services.adminService;
 
 import org.springframework.http.ResponseEntity;
 

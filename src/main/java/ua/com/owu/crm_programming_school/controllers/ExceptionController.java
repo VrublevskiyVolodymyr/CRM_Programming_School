@@ -1,13 +1,16 @@
 package ua.com.owu.crm_programming_school.controllers;
 
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.SignatureException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -48,5 +51,6 @@ public class ExceptionController {
         ResponseEntity<String> response = new ResponseEntity<>(Objects.requireNonNull(e.getLocalizedMessage()), httpHeaders, HttpStatus.BAD_REQUEST);
         return response;
     }
+
 
 }

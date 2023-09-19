@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.com.owu.crm_programming_school.models.OrderPaginated;
-import ua.com.owu.crm_programming_school.services.OrderService;
+import ua.com.owu.crm_programming_school.services.orderService.OrderService;
 
 @RestController
 @RequestMapping("/orders")
@@ -39,7 +39,7 @@ public class OrdersController {
             })
     public ResponseEntity<OrderPaginated> getAllOrders(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "created") String order,
+            @RequestParam(defaultValue = "-id") String order,
             @RequestParam(defaultValue = "25") int size) {
         return orderService.getAllOrders(page,order,size);
     }

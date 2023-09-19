@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserResponse {
+    @Schema(description = "Unique identifier for the user", readOnly = true)
     private int id;
 
     @Schema(description = "User's first name", example = "John")

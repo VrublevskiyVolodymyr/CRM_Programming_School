@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import ua.com.owu.crm_programming_school.services.AdminService;
+import ua.com.owu.crm_programming_school.services.adminService.AdminService;
 
 @Component
 

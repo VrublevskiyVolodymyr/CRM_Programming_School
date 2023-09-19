@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import ua.com.owu.crm_programming_school.models.ResponseError;
-import ua.com.owu.crm_programming_school.services.JwtService;
+import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
 
 import java.io.IOException;
 

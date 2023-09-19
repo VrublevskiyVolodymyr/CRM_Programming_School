@@ -1,4 +1,4 @@
-package ua.com.owu.crm_programming_school.services;
+package ua.com.owu.crm_programming_school.services.adminService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.*;
+import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class AdminServiceImpl1 implements AdminService {
                     .password(passwordEncoder.encode("1111"))
                     .roles(List.of(Role.MANAGER))
                     .createdAt(LocalDateTime.now().withNano(0))
-                    .is_Active(false)
+                    .is_active(false)
                     .is_staff(true)
                     .is_superuser(false)
                     .build();
@@ -74,7 +75,7 @@ public class AdminServiceImpl1 implements AdminService {
                 .password(passwordEncoder.encode("admin"))
                 .roles(List.of(Role.ADMIN))
                 .createdAt(LocalDateTime.now().withNano(0))
-                .is_Active(true)
+                .is_active(true)
                 .is_staff(true)
                 .is_superuser(true)
                 .build();
