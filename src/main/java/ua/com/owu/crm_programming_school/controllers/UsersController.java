@@ -20,7 +20,7 @@ import ua.com.owu.crm_programming_school.views.Views;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 @Tag(name = "users")
 public class UsersController {
     private UsersService usersService;
