@@ -2,6 +2,8 @@ package ua.com.owu.crm_programming_school.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,7 +68,7 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (IOException | UsernameNotFoundException | ServletException e) {
             throw new RuntimeException(e);
         } catch (ExpiredJwtException e) {
-            response.setHeader("TokenError", "token dead");
+            response.setHeader("TokenError", "token is dead");
             response.resetBuffer();
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -82,7 +84,20 @@ public class JWTFilter extends OncePerRequestFilter {
 
             return;
 
-        }
+    } catch (MalformedJwtException | SignatureException e) {
+        response.setHeader("TokenError", "invalid token");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        ResponseError responseError = ResponseError
+                .builder()
+                .error("invalid token")
+                .code(401)
+                .build();
+
+        response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+        return;
+    }
+
         filterChain.doFilter(request, response);
     }
 }

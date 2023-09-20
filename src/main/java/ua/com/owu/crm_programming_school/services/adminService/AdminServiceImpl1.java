@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.web.ErrorResponse;
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.*;
 import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
@@ -18,12 +19,15 @@ public class AdminServiceImpl1 implements AdminService {
     private UserDAO userDAO;
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
-    public ResponseEntity<UserResponse> registerManager(UserRequest userRequest) {
+    public ResponseEntity<Object> registerManager(UserRequest userRequest) {
         try {
-            if (userRequest == null) {
-                throw new NullPointerException("User cannot be null");
+            if (userDAO.existsByEmail(userRequest.getEmail())) {
+                ResponseError responseError = new ResponseError("Email already exists", 400);
+                return new ResponseEntity<>(responseError, HttpStatus.BAD_REQUEST);
             }
-            User manager = User
+
+
+                User manager = User
                     .builder()
                     .name(userRequest.getName())
                     .surname(userRequest.getSurname())
@@ -81,7 +85,6 @@ public class AdminServiceImpl1 implements AdminService {
                 .build();
 
         userDAO.save(admin);
-
 
     }
 

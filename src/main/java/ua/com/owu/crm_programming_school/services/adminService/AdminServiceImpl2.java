@@ -12,7 +12,7 @@ import ua.com.owu.crm_programming_school.services.adminService.AdminService;
 @Service
 public class AdminServiceImpl2 implements AdminService {
     @Override
-    public ResponseEntity<UserResponse> registerManager(UserRequest userRequest) {
+    public ResponseEntity<Object> registerManager(UserRequest userRequest) {
         return null;
     }
 

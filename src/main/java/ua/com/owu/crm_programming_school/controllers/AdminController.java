@@ -30,7 +30,7 @@ public class AdminController {
             responses = { @ApiResponse(description = "CREATED", responseCode = "201",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class)))})
 
-    public ResponseEntity<UserResponse> registerManager(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<Object> registerManager(@RequestBody @Valid UserRequest userRequest) {
         return adminService.registerManager(userRequest);
     }
 

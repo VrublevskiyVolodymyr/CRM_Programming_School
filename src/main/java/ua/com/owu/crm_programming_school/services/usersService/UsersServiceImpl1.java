@@ -16,10 +16,10 @@ public class UsersServiceImpl1 implements UsersService{
     private UserDAO userDAO;
 
     @Override
-    public ResponseEntity<User> getCurrentUser(Principal principal) {
+    public ResponseEntity<User> getCurrentUser(Principal principal ) {
       String username = principal.getName();
 
-      if(username==null) {
+      if(username.isEmpty()) {
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
 

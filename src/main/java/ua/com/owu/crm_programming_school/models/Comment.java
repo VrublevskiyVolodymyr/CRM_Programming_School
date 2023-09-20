@@ -29,12 +29,11 @@ public class Comment {
     @Schema(description = "Comment creation date", readOnly = true)
     private Date createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    @Schema(description = "The order associated with the comment")
-    private Order order;
 
-    @ManyToOne
+    @Schema(description = "The order id associated with the comment")
+    private int orderId;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private User manager;
 }

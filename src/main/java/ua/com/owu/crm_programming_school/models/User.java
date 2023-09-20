@@ -105,6 +105,10 @@ public class User implements UserDetails {
     public User(UserDetails loadUserByEmail) {
     }
 
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
+
     @Override
     @Hidden
     public Collection<? extends GrantedAuthority> getAuthorities() {

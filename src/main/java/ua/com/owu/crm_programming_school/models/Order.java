@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class Order {
     @Column(name = "course_format", nullable = true)
     @Pattern(regexp = "static|online|^$")
     @Schema(description = "User's course format", example = "online")
-private String courseFormat;
+    private String courseFormat;
 
     @Column(name = "course_type", nullable = true)
     @Pattern(regexp = "pro|minimal|premium|incubator|vip")
@@ -98,10 +99,15 @@ private String courseFormat;
     @Schema(description = "Order's UTM parameter", example = "utm_source=google&utm_medium=cpc")
     private String utm;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "order_comment",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
     private List<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group group;
 }

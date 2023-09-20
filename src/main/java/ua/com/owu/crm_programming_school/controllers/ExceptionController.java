@@ -1,16 +1,17 @@
 package ua.com.owu.crm_programming_school.controllers;
 
-import jakarta.servlet.ServletException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ua.com.owu.crm_programming_school.models.ResponseError;
 
-import java.security.SignatureException;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -52,5 +53,46 @@ public class ExceptionController {
         return response;
     }
 
+    @ExceptionHandler(ExpiredJwtException.class )
+    public ResponseEntity<String> exceptionHandler(ExpiredJwtException  expiredJwtException, HttpServletResponse response) {
+
+        response.setHeader("TokenError", "Invalid token");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        ResponseError responseError = ResponseError
+                .builder()
+                .error("Invalid token")
+                .code(401)
+                .build();
+        try {
+            response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @ExceptionHandler(AuthenticationException.class )
+    public ResponseEntity<String> exceptionHandler(AuthenticationException authenticationException, HttpServletResponse response) {
+
+        response.setHeader("AuthenticationError", "invalid username or password");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        ResponseError responseError = ResponseError
+                .builder()
+                .error("Invalid username or password")
+                .code(401)
+                .build();
+        try {
+            response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 
 }

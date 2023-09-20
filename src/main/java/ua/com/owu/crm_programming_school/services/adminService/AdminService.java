@@ -9,7 +9,7 @@ import ua.com.owu.crm_programming_school.models.UserResponse;
 
 
 public interface AdminService {
-    public ResponseEntity<UserResponse> registerManager(UserRequest userRequest);
+    public ResponseEntity<Object> registerManager(UserRequest userRequest);
 
     ResponseEntity<ResponseAccess> requestToken(Integer id);
 
