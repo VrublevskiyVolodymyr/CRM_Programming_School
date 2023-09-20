@@ -58,7 +58,7 @@ public class User implements UserDetails {
     @NotBlank(message = "password cannot be empty")
     @JsonView(value = {Views.Level1.class})
     @Size(min = 5, max = 128, message = "The password must be between 5 and 128 characters long.")
-    @Schema(required = true, description = "User's password", example = "Password123!")
+    @Hidden
     private String password;
 
     @JsonView(value = {Views.Level1.class})
