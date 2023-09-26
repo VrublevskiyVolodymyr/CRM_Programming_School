@@ -2,15 +2,18 @@ package ua.com.owu.crm_programming_school.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ua.com.owu.crm_programming_school.models.ResponseAccess;
+import ua.com.owu.crm_programming_school.models.ResponseError;
 import ua.com.owu.crm_programming_school.models.UserRequest;
 import ua.com.owu.crm_programming_school.models.UserResponse;
 import ua.com.owu.crm_programming_school.services.adminService.AdminService;
@@ -27,11 +30,16 @@ public class AdminController {
 
     @PostMapping("/users")
     @Operation(description = "Create new user",
-            responses = { @ApiResponse(description = "CREATED", responseCode = "201",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class)))})
+            responses = { @ApiResponse(description = "created", responseCode = "201",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "duplicate email",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseError.class),
+                                    examples = @ExampleObject(name = "errorResponse",
+                                            value = "{\"error\": \"duplicate email\", \"code\": 400}")))})
 
-    public ResponseEntity<Object> registerManager(@RequestBody @Valid UserRequest userRequest) {
-        return adminService.registerManager(userRequest);
+    public ResponseEntity<UserResponse> registerManager(@RequestBody @Valid UserRequest userRequest, HttpServletResponse response) {
+        return adminService.registerManager(userRequest, response);
     }
 
 

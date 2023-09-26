@@ -1,10 +1,15 @@
 package ua.com.owu.crm_programming_school.services.adminService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,11 +24,25 @@ public class AdminServiceImpl1 implements AdminService {
     private UserDAO userDAO;
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
-    public ResponseEntity<Object> registerManager(UserRequest userRequest) {
+    public ResponseEntity<UserResponse> registerManager(UserRequest userRequest, HttpServletResponse response) {
         try {
             if (userDAO.existsByEmail(userRequest.getEmail())) {
-                ResponseError responseError = new ResponseError("Email already exists", 400);
-                return new ResponseEntity<>(responseError, HttpStatus.BAD_REQUEST);
+                response.setHeader("Duplicate", "Invalid email");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                ResponseError responseError = ResponseError
+                        .builder()
+                        .error("duplicate email")
+                        .code(400)
+                        .build();
+                try {
+                    response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+                    response.getOutputStream().flush();
+                    response.getOutputStream().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
 

@@ -20,6 +20,7 @@ public class OrderServiceImpl1 implements OrderService {
 
     public ResponseEntity<OrderPaginated> getAllOrders(int page, String order, int size) {
 
+        System.out.println(order);
         Sort.Direction sortDirection = Sort.Direction.ASC;
         String sortBy;
 
