@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenObtainPair {
     @NotBlank(message = "username is a required field")
-    @Email
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Invalid email address")
     @Size(min = 1, max = 25)
-    @Schema(description = "User's username", example = "John")
+    @Schema(description = "User's username", example = "john.doe@example.com")
     private String username;
 
     @NotBlank(message = "password is a required field")

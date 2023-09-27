@@ -27,7 +27,7 @@ public class UserRequest {
     private String surname;
 
     @NotBlank(message = "email is a required field")
-    @Email
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Invalid email address")
     @Size(min = 1, max = 254)
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String email;
