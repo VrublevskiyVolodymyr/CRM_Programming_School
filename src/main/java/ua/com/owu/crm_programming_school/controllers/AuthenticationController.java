@@ -65,11 +65,11 @@ public class AuthenticationController {
                                     examples = @ExampleObject(
                                             name = "errorResponse",
                                             value = "{\"error\": \"invalid username or password\", \"code\": 401}"))),
-                    @ApiResponse(responseCode = "403", description = "token is dead",
+                    @ApiResponse(responseCode = "401", description = "token is dead",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class),
                                     examples = @ExampleObject(name = "errorResponse",
-                                            value = "{\"error\": \"token is dead\", \"code\": 403}")))})
+                                            value = "{\"error\": \"token is dead\", \"code\": 401}")))})
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid TokenObtainPair tokenObtainPair) {
 
         return authenticationService.authenticate(tokenObtainPair);
@@ -86,11 +86,11 @@ public class AuthenticationController {
                     @ApiResponse(responseCode = "401", description = "invalid token",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class))),
-                    @ApiResponse(responseCode = "403", description = "token is dead",
+                    @ApiResponse(responseCode = "401", description = "token is dead",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class),
                                     examples = @ExampleObject(name = "errorResponse",
-                                            value = "{\"error\": \"token is dead\", \"code\": 403}")))})
+                                            value = "{\"error\": \"token is dead\", \"code\": 401}")))})
     public ResponseEntity<AuthenticationResponse> refresh(@RequestBody RequestRefresh requestRefresh, HttpServletResponse response) {
 
         return authenticationService.refresh(requestRefresh,response);

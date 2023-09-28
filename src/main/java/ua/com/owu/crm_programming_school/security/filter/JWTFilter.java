@@ -19,7 +19,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.ResponseError;
+import ua.com.owu.crm_programming_school.models.User;
 import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
 
 import java.io.IOException;
@@ -30,26 +32,28 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private JwtService jwtService;
     private UserDetailsService userDetailsService;
+    private UserDAO userDAO;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
+        String requestUri = request.getRequestURI();
 
         try {
-            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ") || requestUri.contains("/auth")) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
             String token = authorizationHeader.replace("Bearer ", "");
             String userEmail = jwtService.extractUsername(token);
+            User user = userDAO.findByEmail(userEmail);
 
-            if (userEmail != null && SecurityContextHolder
-                    .getContext()
-                    .getAuthentication() == null) {
+            if (user != null && user.getTokenVersion() == jwtService.extractTokenVersion(token)) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
 
                 if (jwtService.isTokenValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -70,12 +74,12 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             response.setHeader("TokenError", "token is dead");
             response.resetBuffer();
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             ResponseError responseError = ResponseError
                     .builder()
                     .error("token is dead")
-                    .code(403)
+                    .code(401)
                     .build();
 
             response

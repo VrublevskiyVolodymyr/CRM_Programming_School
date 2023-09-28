@@ -39,11 +39,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers(HttpMethod.POST,"/auth","/auth/refresh","/auth/activate/{token}").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/orders/**", "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/api/v1/doc/**", "/swagger-ui/**", "/webjars/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/api/v1/doc/**", "/swagger-ui/**", "/webjars/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/admin/users").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/admin/users/{id}/re_token").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/groups").hasAnyAuthority("MANAGER", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/groups", "/users/me").hasAnyAuthority("MANAGER", "ADMIN"))
+                                .requestMatchers(HttpMethod.GET, "/orders/**","/groups", "/users/me").hasAnyAuthority("MANAGER", "ADMIN"))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

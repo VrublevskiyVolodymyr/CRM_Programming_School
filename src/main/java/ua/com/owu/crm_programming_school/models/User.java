@@ -95,6 +95,11 @@ public class User implements UserDetails {
     @Schema(description = "User last login date", readOnly = true)
     private LocalDateTime lastLogin;
 
+    @JsonView(value = Views.Level1.class)
+    @Hidden
+    private int tokenVersion = 0;
+
+
 
     public User(String name, String surname, String email) {
         this.name = name;

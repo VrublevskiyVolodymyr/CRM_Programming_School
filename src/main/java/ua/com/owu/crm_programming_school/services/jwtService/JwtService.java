@@ -8,6 +8,9 @@ import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ua.com.owu.crm_programming_school.dao.UserDAO;
+import ua.com.owu.crm_programming_school.models.User;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import java.util.function.Function;
 @Service
 @AllArgsConstructor
 public class JwtService {
+    private UserDAO userDAO;
     private static final String SECRETE_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     public String extractUsername(String jwt) {
@@ -48,13 +52,19 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        User user = userDAO.findByEmail(userDetails.getUsername());
+        user.setTokenVersion(user.getTokenVersion() + 1);
+        userDAO.save(user);
+
+        int tokenVersion = user.getTokenVersion();
 
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 100000 * 15))
+                .claim("tokenVersion", tokenVersion)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -68,17 +78,20 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        User user = userDAO.findByEmail(userDetails.getUsername());
+
+        int tokenVersion = user.getTokenVersion();
 
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                .claim("tokenVersion", tokenVersion)
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
     public String generateRefreshToken(UserDetails userDetails) {
         return generateRefreshToken(new HashMap<>(), userDetails);
     }
@@ -95,4 +108,10 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
+
+    public int extractTokenVersion(String jwt) {
+        Claims claims = exctarctAllClaims(jwt);
+        return (int) claims.get("tokenVersion", Integer.class);
+    }
+
 }
