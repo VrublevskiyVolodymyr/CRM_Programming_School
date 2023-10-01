@@ -2,6 +2,7 @@ package ua.com.owu.crm_programming_school.services.authenticationService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -66,28 +67,50 @@ public class AuthenticationServiceImpl1 implements AuthenticationService {
 
     public ResponseEntity<AuthenticationResponse> refresh(RequestRefresh requestRefresh, HttpServletResponse response) {
 
-        String accessToken = requestRefresh.getRefresh();
-        String username = jwtService.extractUsername(accessToken);
-        User user = userDAO.findByEmail(username);
-        String newAccessToken = null;
-        String newRefreshToken = null;
+        try {
 
-        if (user.getRefreshToken().equals(accessToken)) {
-            newAccessToken = jwtService.generateToken(user);
-            newRefreshToken = jwtService.generateRefreshToken(user);
-            user.setRefreshToken(newRefreshToken);
-            userDAO.save(user);
+            String accessToken = requestRefresh.getRefresh();
+            String username = jwtService.extractUsername(accessToken);
+            User user = userDAO.findByEmail(username);
+            String newAccessToken = null;
+            String newRefreshToken = null;
 
-            AuthenticationResponse responseAuth = AuthenticationResponse
-                    .builder()
-                    .access(newAccessToken)
-                    .refresh(newRefreshToken)
-                    .build();
+            if (user.getRefreshToken().equals(accessToken)) {
+                newAccessToken = jwtService.generateToken(user);
+                newRefreshToken = jwtService.generateRefreshToken(user);
+                user.setRefreshToken(newRefreshToken);
+                userDAO.save(user);
+
+                AuthenticationResponse responseAuth = AuthenticationResponse
+                        .builder()
+                        .access(newAccessToken)
+                        .refresh(newRefreshToken)
+                        .build();
 
 
-            return new ResponseEntity<>(responseAuth, HttpStatus.OK);
+                return new ResponseEntity<>(responseAuth, HttpStatus.OK);
 
-        } else {
+            } else {
+                response.setHeader("TokenError", "Token is not valid");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                ResponseError responseError = ResponseError
+                        .builder()
+                        .error("Token is not valid")
+                        .code(401)
+                        .build();
+                try {
+                    response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+                    response.getOutputStream().flush();
+                    response.getOutputStream().close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (MalformedJwtException | SignatureException e) {
+
+
             response.setHeader("TokenError", "Token is not valid");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");

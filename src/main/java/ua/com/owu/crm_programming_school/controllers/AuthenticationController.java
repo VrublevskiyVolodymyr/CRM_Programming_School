@@ -59,7 +59,7 @@ public class AuthenticationController {
                     @ApiResponse(responseCode = "401", description = "invalid token",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class))),
-                    @ApiResponse(responseCode = "401", description = "invalid username or password",
+                    @ApiResponse(responseCode = "401", description = "wrong email or password",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class),
                                     examples = @ExampleObject(

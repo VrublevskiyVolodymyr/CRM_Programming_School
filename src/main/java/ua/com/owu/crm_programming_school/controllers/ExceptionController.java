@@ -77,12 +77,12 @@ public class ExceptionController {
     @ExceptionHandler(AuthenticationException.class )
     public ResponseEntity<String> exceptionHandler(AuthenticationException authenticationException, HttpServletResponse response) {
 
-        response.setHeader("AuthenticationError", "invalid username or password");
+        response.setHeader("AuthenticationError", "wrong email or password");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         ResponseError responseError = ResponseError
                 .builder()
-                .error("Invalid username or password")
+                .error("wrong email or password")
                 .code(401)
                 .build();
         try {
