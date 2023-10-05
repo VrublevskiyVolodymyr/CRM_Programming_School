@@ -27,34 +27,30 @@ private GroupsService groupsService;
  }
 
  @GetMapping("")
- @Operation(description = "Get all groups",
+ @Operation(summary = "get all groups",
+         description = "Get all groups",
          responses = {
                  @ApiResponse(
                          description = "success",
                          responseCode = "200",
                          content = @Content(
                                  mediaType = "application/json",
-                                 schema = @Schema(implementation = GroupListResponse.class
-                                 )
-                         ))
-         })
+                                 schema = @Schema(implementation = GroupListResponse.class)))})
     public ResponseEntity<List<Group>> getAllGroups() {
      return groupsService.getAllGroups();
  }
 
 
     @PostMapping("")
-    @Operation(description = "Create group",
+    @Operation(summary = "create group",
+            description = "Create group",
             responses = {
                     @ApiResponse(
                             description = "created",
                             responseCode = "201",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = Group.class
-                                    )
-                            ))
-            })
+                                    schema = @Schema(implementation = Group.class)))})
     public ResponseEntity<Group> createGroup(@RequestBody @Valid Group group) {
         return groupsService.createGroup(group);
     }

@@ -31,7 +31,8 @@ public class AuthenticationController {
 
     @PostMapping("/activate/{token}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(description = "Activate user",
+    @Operation(summary = "activate user",
+            description = "Activate user",
             responses = {
                     @ApiResponse(description = "success", responseCode = "200"),
                     @ApiResponse(responseCode = "401", description = "invalid token",
@@ -48,7 +49,8 @@ public class AuthenticationController {
     }
 
     @PostMapping()
-    @Operation(description = "Takes a set of user credentials and returns an access and refresh JSON web\\n\" +\n" +
+    @Operation(summary = "auth user",
+            description = "Takes a set of user credentials and returns an access and refresh JSON web\\n\" +\n" +
             "token pair to prove the authentication of those credentials.",
             responses = {
                     @ApiResponse(description = "success", responseCode = "200",
@@ -76,7 +78,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    @Operation(description = "Takes a refresh type JSON web token and returns an access type JSON web\\n\" +\n" +
+    @Operation(summary = "get refresh token",
+            description = "Takes a refresh type JSON web token and returns an access type JSON web\\n\" +\n" +
             "//            \"token if the refresh token is valid.",
             responses = {
                     @ApiResponse(description = "success", responseCode = "200",

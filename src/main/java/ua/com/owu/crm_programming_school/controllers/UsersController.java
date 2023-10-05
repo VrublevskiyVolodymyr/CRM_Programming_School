@@ -30,7 +30,8 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    @Operation(description = "Get current user",
+    @Operation(summary = "get current user",
+            description = "Get current user",
             responses = {
                     @ApiResponse(
                             description = "success",

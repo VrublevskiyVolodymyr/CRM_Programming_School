@@ -9,10 +9,10 @@ import ua.com.owu.crm_programming_school.views.Views;
 
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderPaginated {
+@Data
+public class UserPaginated {
     @Schema(description = "Total number of items")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private int total_items;
@@ -21,14 +21,14 @@ public class OrderPaginated {
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private int total_pages;
 
-    @Schema(description = "Link to the previous page of orders")
+    @Schema(description = "Link to the previous page of users")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private String prev;
 
-    @Schema(description = "List of orders on the current page")
+    @Schema(description = "List of users on the current page")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private String next;
 
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
-    private List<Order> items;
+    private List<User> items;
 }

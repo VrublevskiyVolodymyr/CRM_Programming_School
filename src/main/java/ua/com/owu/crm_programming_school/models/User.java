@@ -48,7 +48,7 @@ public class User implements UserDetails {
     private String surname;
 
     @Column(unique = true)
-    @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
+    @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @NotBlank(message = "email is a required field")
     @Email
     @Size(min = 1, max = 254)

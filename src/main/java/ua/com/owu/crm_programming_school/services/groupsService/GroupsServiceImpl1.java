@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class GroupsServiceImpl1 implements GroupsService{
+public class GroupsServiceImpl1 implements GroupsService {
     private GroupDAO groupDAO;
 
     @Override
@@ -23,9 +23,14 @@ public class GroupsServiceImpl1 implements GroupsService{
 
     @Override
     public ResponseEntity<Group> createGroup(Group group) {
-        Group savedGroup = groupDAO.save(new Group(group.getName()));
-        return new ResponseEntity<>(savedGroup, HttpStatus.CREATED);
-    }
+        List<String> singleGroup = groupDAO.findAll().stream().map(Group::getName).toList();
 
+        if (singleGroup.contains(group.getName())) {
+            return new ResponseEntity<>(null, HttpStatus.valueOf("Group already exists"));
+        } else {
+            Group savedGroup = groupDAO.save(new Group(group.getName()));
+            return new ResponseEntity<>(savedGroup, HttpStatus.CREATED);
+        }
+    }
 
 }

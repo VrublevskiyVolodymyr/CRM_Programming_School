@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.util.List;
+
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,4 +21,12 @@ public class ResponseError {
 
     @Schema(description = "Error code", example = "401")
     private int code;
+
+    @Schema(description = "Error message", example = "One or more fields are not valid")
+    private List<String> details;
+
+    public ResponseError(String error, int code) {
+        this.error = error;
+        this.code = code;
+    }
 }

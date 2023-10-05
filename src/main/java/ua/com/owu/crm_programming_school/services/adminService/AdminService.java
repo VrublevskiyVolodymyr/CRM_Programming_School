@@ -3,10 +3,9 @@ package ua.com.owu.crm_programming_school.services.adminService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 
-import ua.com.owu.crm_programming_school.models.ResponseAccess;
-import ua.com.owu.crm_programming_school.models.User;
-import ua.com.owu.crm_programming_school.models.UserRequest;
-import ua.com.owu.crm_programming_school.models.UserResponse;
+import ua.com.owu.crm_programming_school.models.*;
+
+import java.util.List;
 
 
 public interface AdminService {
@@ -17,4 +16,10 @@ public interface AdminService {
     boolean adminExists();
 
     void createAdminDefault();
+
+    ResponseEntity<User> banManager(Integer id);
+
+    ResponseEntity<User> unbanManager(Integer id);
+
+    ResponseEntity<UserPaginated> getAll(Integer page);
 }
