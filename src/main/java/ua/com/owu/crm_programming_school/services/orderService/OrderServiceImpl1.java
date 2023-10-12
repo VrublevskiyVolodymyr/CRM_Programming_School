@@ -1,14 +1,24 @@
 package ua.com.owu.crm_programming_school.services.orderService;
 
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +26,8 @@ import ua.com.owu.crm_programming_school.dao.GroupDAO;
 import ua.com.owu.crm_programming_school.dao.OrderDAO;
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.*;
-
+import ua.com.owu.crm_programming_school.models.Comment;
+import ua.com.owu.crm_programming_school.specification.OrderSpecifications;
 
 
 @Service
@@ -26,8 +37,13 @@ public class OrderServiceImpl1 implements OrderService {
     private UserDAO userDAO;
     private GroupDAO groupDAO;
 
-    public ResponseEntity<OrderPaginated> getAllOrders(int page, String order, int size) {
+    public ResponseEntity<OrderPaginated> getAllOrders(Integer page, String order, Integer size, String name, String surname, String email, String phone,
+                                                       Integer age, String course, String courseFormat, String courseType,
+                                                       Integer alreadyPaid, String group, Integer sum, String status, String manager, String my,
+                                                       LocalDate startDate, LocalDate endDate, Principal principal) {
         try {
+
+            boolean isMy = "true".equalsIgnoreCase(my);
 
             Sort.Direction sortDirection = Sort.Direction.ASC;
             String sortBy;
@@ -51,12 +67,30 @@ public class OrderServiceImpl1 implements OrderService {
             }
             if (page < 1) {
                 page = 1;
-
             }
 
             Pageable pageable = PageRequest.of(page - 1, size, sortDirection, sortBy);
 
-            Page<Order> orders = orderDAO.findAll(pageable);
+            Specification<Order> spec = Specification.where(null);
+
+            spec = spec.and(OrderSpecifications.filterByName(name));
+            spec = spec.and(OrderSpecifications.filterBySurname(surname));
+            spec = spec.and(OrderSpecifications.filterByEmail(email));
+            spec = spec.and(OrderSpecifications.filterByPhone(phone));
+            spec = spec.and(OrderSpecifications.filterByAge(age));
+            spec = spec.and(OrderSpecifications.filterByCourse(course));
+            spec = spec.and(OrderSpecifications.filterByCourseFormat(courseFormat));
+            spec = spec.and(OrderSpecifications.filterByCourseType(courseType));
+            spec = spec.and(OrderSpecifications.filterBySum(sum));
+            spec = spec.and(OrderSpecifications.filterByStatus(status));
+            spec = spec.and(OrderSpecifications.filterByAlreadyPaid(alreadyPaid));
+            spec = spec.and(OrderSpecifications.filterByGroup(group));
+            spec = spec.and(OrderSpecifications.filterByManager(manager));
+            spec = spec.and(OrderSpecifications.filterByMy(principal, isMy));
+            spec = spec.and(OrderSpecifications.filterByStartDate(startDate));
+            spec = spec.and(OrderSpecifications.filterByEndDate(endDate));
+
+            Page<Order> orders = orderDAO.findAll(spec, pageable);
 
             OrderPaginated orderPaginated = new OrderPaginated();
             orderPaginated.setTotal_items((int) orders.getTotalElements());
@@ -167,9 +201,10 @@ public class OrderServiceImpl1 implements OrderService {
                             .build();
                     comments.add(comment);
                     order.setComments(comments);
+                    order.setManager(manager);
                     String status = order.getStatus();
 
-                    if (status.equals("New") || status.equals(null)) {
+                    if ("New".equals(status) || status == null) {
                         order.setStatus("In work");
                     }
                     orderDAO.save(order);
@@ -183,11 +218,140 @@ public class OrderServiceImpl1 implements OrderService {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
+    @Override
+    public ResponseEntity<byte[]> getFilteredOrdersExcel(Integer page, String order, Integer size, String name, String surname, String email, String phone, Integer age, String course, String courseFormat, String courseType, Integer alreadyPaid, String group, Integer sum, String status, String manager, String my, LocalDate startDate, LocalDate endDate, Principal principal) {
+        try {
+
+            boolean isMy = "true".equalsIgnoreCase(my);
+
+            Sort.Direction sortDirection = Sort.Direction.ASC;
+            String sortBy;
+
+            if (order != null && !order.isEmpty()) {
+                if (order.startsWith("-")) {
+                    sortDirection = Sort.Direction.DESC;
+                    sortBy = order.substring(1);
+                } else {
+                    sortBy = order;
+                }
+            } else {
+                sortBy = order;
+            }
+            int totalRecords = (int) orderDAO.count();
+            int maxPage = (int) Math.ceil((double) totalRecords / size);
+            int originalPage = page;
+
+            if (page > maxPage) {
+                page = maxPage;
+            }
+            if (page < 1) {
+                page = 1;
+            }
+
+            Pageable pageable = PageRequest.of(page - 1, size, sortDirection, sortBy);
+
+            Specification<Order> spec = Specification.where(null);
+
+            spec = spec.and(OrderSpecifications.filterByName(name));
+            spec = spec.and(OrderSpecifications.filterBySurname(surname));
+            spec = spec.and(OrderSpecifications.filterByEmail(email));
+            spec = spec.and(OrderSpecifications.filterByPhone(phone));
+            spec = spec.and(OrderSpecifications.filterByAge(age));
+            spec = spec.and(OrderSpecifications.filterByCourse(course));
+            spec = spec.and(OrderSpecifications.filterByCourseFormat(courseFormat));
+            spec = spec.and(OrderSpecifications.filterByCourseType(courseType));
+            spec = spec.and(OrderSpecifications.filterBySum(sum));
+            spec = spec.and(OrderSpecifications.filterByStatus(status));
+            spec = spec.and(OrderSpecifications.filterByAlreadyPaid(alreadyPaid));
+            spec = spec.and(OrderSpecifications.filterByGroup(group));
+            spec = spec.and(OrderSpecifications.filterByManager(manager));
+            spec = spec.and(OrderSpecifications.filterByMy(principal, isMy));
+            spec = spec.and(OrderSpecifications.filterByStartDate(startDate));
+            spec = spec.and(OrderSpecifications.filterByEndDate(endDate));
+
+
+            Page<Order> orders = orderDAO.findAll(spec, pageable);
+
+            List<Order> filteredOrders = orders.getContent();
+
+            byte[] excelFile = generateExcelFile(filteredOrders);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "filtered_orders.xlsx");
+
+            return ResponseEntity
+                    .ok()
+                    .headers(headers)
+                    .body(excelFile);
+
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public byte[] generateExcelFile(List<Order> orders) {
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            Sheet sheet = (Sheet) workbook.createSheet("Orders");
+
+            Row headerRow = sheet.createRow(0);
+
+            headerRow.createCell(0).setCellValue("Id");
+            headerRow.createCell(1).setCellValue("Name");
+            headerRow.createCell(2).setCellValue("Surname");
+            headerRow.createCell(3).setCellValue("Email");
+            headerRow.createCell(4).setCellValue("Phone");
+            headerRow.createCell(5).setCellValue("Age");
+            headerRow.createCell(6).setCellValue("Course");
+            headerRow.createCell(7).setCellValue("Course Format");
+            headerRow.createCell(8).setCellValue("Course Type");
+            headerRow.createCell(9).setCellValue("Status");
+            headerRow.createCell(10).setCellValue("Sum");
+            headerRow.createCell(11).setCellValue("Already Paid");
+            headerRow.createCell(12).setCellValue("Group");
+            headerRow.createCell(13).setCellValue("Created At");
+            headerRow.createCell(14).setCellValue("Manager");
+
+            int rowNum = 1;
+            for (Order order : orders) {
+                Row row = sheet.createRow(rowNum++);
+
+                row.createCell(0).setCellValue(order.getId());
+                row.createCell(1).setCellValue(order.getName() != null ? order.getName() : "");
+                row.createCell(2).setCellValue(order.getSurname() != null ? order.getSurname() : "");
+                row.createCell(3).setCellValue(order.getEmail() != null ? order.getEmail() : "");
+                row.createCell(4).setCellValue(order.getPhone() != null ? order.getPhone() : "");
+                row.createCell(5).setCellValue(order.getAge() != null ? order.getAge().toString() : "");
+                row.createCell(6).setCellValue(order.getCourse() != null ? order.getCourse() : "");
+                row.createCell(7).setCellValue(order.getCourseFormat() != null ? order.getCourseFormat() : "");
+                row.createCell(8).setCellValue(order.getCourseType() != null ? order.getCourseType() : "");
+                row.createCell(9).setCellValue(order.getStatus() != null ? order.getStatus() : "");
+                row.createCell(10).setCellValue(order.getSum() != null ? order.getSum().toString() : "");
+                row.createCell(11).setCellValue(order.getAlreadyPaid() != null ? order.getAlreadyPaid().toString() : "");
+                row.createCell(12).setCellValue(order.getGroup() != null && order.getGroup().getName() != null ? order.getGroup().getName() : "");
+                row.createCell(13).setCellValue(order.getCreated() != null ? order.getCreated().toString() : "");
+                row.createCell(14).setCellValue(order.getManager() != null && order.getManager().getName() != null ? order.getManager().getName() : "");
+
+            }
+
+            workbook.write(out);
+            return out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private String generatePageUrlPrev(int pageUrl, String order, int maxPage) {
         if (pageUrl < 1) {
             pageUrl = 2;
         }
+
         if (pageUrl >= maxPage) {
             pageUrl = maxPage - 1;
         }

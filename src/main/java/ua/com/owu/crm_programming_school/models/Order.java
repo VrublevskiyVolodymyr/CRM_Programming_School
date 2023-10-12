@@ -97,7 +97,7 @@ public class Order {
     private String msg;
 
     @Column(name = "status", nullable = true)
-    @Pattern(regexp = "In work|New|Aggre|Disaggre|Dubbing")
+    @Pattern(regexp = "In work|New|Agree|Disagree|Dubbing")
     @Schema(description = "Order status", example = "New")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private String status;

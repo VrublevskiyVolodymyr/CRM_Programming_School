@@ -77,7 +77,7 @@ public class OrderEdit {
     @Schema(description = "User's message", example = "Thank you for registration!")
     private String msg;
 
-    @Pattern(regexp = "In work|New|Aggre|Disaggre|Dubbing")
+    @Pattern(regexp = "In work|New|Agree|Disagree|Dubbing")
     @Nullable
     @Schema(description = "Order status", example = "New")
     private String status;

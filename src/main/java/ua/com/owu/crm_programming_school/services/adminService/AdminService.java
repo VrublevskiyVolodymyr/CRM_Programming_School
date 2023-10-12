@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import ua.com.owu.crm_programming_school.models.*;
 
-import java.util.List;
+import java.util.Map;
 
 
 public interface AdminService {
@@ -22,4 +22,8 @@ public interface AdminService {
     ResponseEntity<User> unbanManager(Integer id);
 
     ResponseEntity<UserPaginated> getAll(Integer page);
+
+    ResponseEntity<Map<String, Object>> getOrderStatistics();
+
+    ResponseEntity<Map<String, Object>> getManagerStatistics(Integer id);
 }

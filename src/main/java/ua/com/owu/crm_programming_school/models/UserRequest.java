@@ -16,7 +16,7 @@ public class UserRequest {
 
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 2)
     @Schema(description = "User's first name", example = "John")
     private String name;
 
@@ -27,7 +27,7 @@ public class UserRequest {
     private String surname;
 
     @NotBlank(message = "email is a required field")
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Invalid email address")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", message = "Invalid email address")
     @Size(min = 1, max = 254)
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String email;

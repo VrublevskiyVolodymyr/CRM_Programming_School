@@ -43,14 +43,14 @@ public class User implements UserDetails {
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     @NotBlank(message = "name is a required field")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 254)
     @Schema(required = true, description = "User's last name", example = "Doe")
     private String surname;
 
     @Column(unique = true)
     @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @NotBlank(message = "email is a required field")
-    @Email
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", message = "Invalid email address")
     @Size(min = 1, max = 254)
     @Schema(required = true, description = "User's email address", example = "john.doe@example.com")
     private String email;

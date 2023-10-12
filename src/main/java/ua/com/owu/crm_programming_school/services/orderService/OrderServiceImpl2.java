@@ -6,13 +6,18 @@ import org.springframework.stereotype.Service;
 import ua.com.owu.crm_programming_school.models.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class OrderServiceImpl2 implements OrderService{
 
     @Override
-    public ResponseEntity<OrderPaginated> getAllOrders(int page, String orderBy, int size) {
+    public ResponseEntity<OrderPaginated> getAllOrders(Integer page, String order, Integer size, String name, String surname, String email, String phone,
+                                                       Integer age, String course, String courseFormat, String courseType,
+                                                       Integer alreadyPaid, String group, Integer sum, String status, String manager, String my,
+                                                       LocalDate startDate, LocalDate endDate, Principal principal) {
         return null;
     }
 
@@ -33,6 +38,11 @@ public class OrderServiceImpl2 implements OrderService{
 
     @Override
     public ResponseEntity<List<Comment>> createComment(Integer orderId, CommentRequest commentRequest, Principal principal) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getFilteredOrdersExcel(Integer page, String order, Integer size, String name, String surname, String email, String phone, Integer age, String course, String courseFormat, String courseType, Integer alreadyPaid, String group, Integer sum, String status, String manager, String my, LocalDate startDate, LocalDate endDate, Principal principal) {
         return null;
     }
 }

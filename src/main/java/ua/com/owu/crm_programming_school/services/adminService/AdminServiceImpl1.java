@@ -14,8 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
+import ua.com.owu.crm_programming_school.dao.OrderDAO;
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.*;
 import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
@@ -24,6 +25,7 @@ import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
 @AllArgsConstructor
 public class AdminServiceImpl1 implements AdminService {
     private UserDAO userDAO;
+    private OrderDAO orderDAO;
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
 
@@ -180,6 +182,80 @@ public class AdminServiceImpl1 implements AdminService {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getOrderStatistics() {
+        Map<String, Object> statistics = new HashMap<>();
+        Long totalCount = orderDAO.count();
+        Long nullStatusCount = orderDAO.countByStatus(null);
+        Long newStatusCount = orderDAO.countByStatus("New");
+        Long newAndNullStatusCount = newStatusCount + nullStatusCount;
+        statistics.put("total_count", totalCount);
+        List<Map<String, Object>> statusCounts = new ArrayList<>();
+
+        statusCounts.add(createStatusCount("In work", orderDAO.countByStatus("In work")));
+        statusCounts.add(createStatusCount("Agree", orderDAO.countByStatus("Agree")));
+        statusCounts.add(createStatusCount("New", newAndNullStatusCount));
+        statusCounts.add(createStatusCount("Disagree", orderDAO.countByStatus("Disagree")));
+        statusCounts.add(createStatusCount("Dubbing", orderDAO.countByStatus("Dubbing")));
+
+        List<Map<String, Object>> formattedStatusCounts = new ArrayList<>();
+        for (Map<String, Object> statusCount : statusCounts) {
+            Map<String, Object> formattedStatusCount = new LinkedHashMap<>();
+            formattedStatusCount.put("status", statusCount.get("status"));
+            formattedStatusCount.put("count", statusCount.get("count"));
+            formattedStatusCounts.add(formattedStatusCount);
+        }
+
+        statistics.put("statuses", formattedStatusCounts);
+        return new ResponseEntity<>(statistics, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getManagerStatistics(Integer id) {
+        Map<String, Object> statistics = new HashMap<>();
+
+        User manager = userDAO.findById(id).orElse(null);
+
+        if (manager == null) {
+            return new ResponseEntity<>(statistics, HttpStatus.NOT_FOUND);
+        }
+
+        Long totalCount = orderDAO.countByManager(manager);
+        statistics.put("total_count", totalCount);
+        Long nullStatusCount = orderDAO.countByStatusAndManager(null, manager);
+        Long newStatusCount = orderDAO.countByStatusAndManager("New", manager);
+        Long newAndNullStatusCount = newStatusCount + nullStatusCount;
+
+        List<Map<String, Object>> statusCounts = new ArrayList<>();
+        statusCounts.add(createStatusCount("In work", orderDAO.countByStatusAndManager("In work", manager)));
+        statusCounts.add(createStatusCount("Agree", orderDAO.countByStatusAndManager("Agree", manager)));
+        statusCounts.add(createStatusCount("New",  newAndNullStatusCount));
+        statusCounts.add(createStatusCount("Disagree", orderDAO.countByStatusAndManager("Disagree", manager)));
+        statusCounts.add(createStatusCount("Dubbing", orderDAO.countByStatusAndManager("Dubbing", manager)));
+
+        List<Map<String, Object>> formattedStatusCounts = new ArrayList<>();
+        for (Map<String, Object> statusCount : statusCounts) {
+            Map<String, Object> formattedStatusCount = new LinkedHashMap<>();
+            formattedStatusCount.put("status", statusCount.get("status"));
+            formattedStatusCount.put("count", statusCount.get("count"));
+            formattedStatusCounts.add(formattedStatusCount);
+        }
+
+        statistics.put("statuses", formattedStatusCounts);
+
+        return new ResponseEntity<>(statistics, HttpStatus.OK);
+
+    }
+
+
+    private Map<String, Object> createStatusCount(String status, Long count) {
+        Map<String, Object> statusCount = new HashMap<>();
+        statusCount.put("status", status);
+        statusCount.put("count", count);
+        return statusCount;
+    }
+
 
     private String generatePageUrlPrev(int pageUrl, int maxPage) {
         if (pageUrl < 1) {

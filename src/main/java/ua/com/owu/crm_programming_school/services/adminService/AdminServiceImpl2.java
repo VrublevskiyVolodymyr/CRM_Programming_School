@@ -5,9 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import ua.com.owu.crm_programming_school.models.*;
-import ua.com.owu.crm_programming_school.services.adminService.AdminService;
 
-import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -44,6 +43,16 @@ public class AdminServiceImpl2 implements AdminService {
 
     @Override
     public ResponseEntity<UserPaginated> getAll(Integer page) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getOrderStatistics() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getManagerStatistics(Integer id) {
         return null;
     }
 

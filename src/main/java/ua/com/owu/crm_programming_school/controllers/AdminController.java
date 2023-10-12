@@ -17,7 +17,8 @@ import ua.com.owu.crm_programming_school.models.*;
 import ua.com.owu.crm_programming_school.services.adminService.AdminService;
 import ua.com.owu.crm_programming_school.views.Views;
 
-import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @Tag(name="admin")
@@ -122,5 +123,83 @@ public class AdminController {
     public ResponseEntity<UserPaginated> getAll(
             @RequestParam(defaultValue = "0") int page){
         return adminService.getAll(page);
+    }
+
+    @Operation(summary = "get all orders statistic",
+            description = "Get all orders statistic",
+            responses = {
+                    @ApiResponse(
+                            description = "success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class),
+                                    examples = @ExampleObject("{\n" +
+                                            "    \"total_count\": 500,\n" +
+                                            "    \"statuses\": [\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"In work\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Agree\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"New\",\n" +
+                                            "            \"count\": 495\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Disagree\",\n" +
+                                            "            \"count\": 2\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Dubbing\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        }\n" +
+                                            "    ]\n" +
+                                            "}")))})
+    @GetMapping("/statistic/orders")
+    public ResponseEntity<Map<String, Object>> getOrderStatistics(){
+        return adminService.getOrderStatistics();
+    }
+
+    @Operation(summary = "get all orders statistic by manager",
+            description = "Get all orders statistic by manager",
+            responses = {
+                    @ApiResponse(
+                            description = "success",
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class),
+                                    examples = @ExampleObject("{\n" +
+                                            "    \"total_count\": 5,\n" +
+                                            "    \"statuses\": [\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"In work\",\n" +
+                                            "            \"count\": 0\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Agree\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"New\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Disagree\",\n" +
+                                            "            \"count\": 2\n" +
+                                            "        },\n" +
+                                            "        {\n" +
+                                            "            \"status\": \"Dubbing\",\n" +
+                                            "            \"count\": 1\n" +
+                                            "        }\n" +
+                                            "    ]\n" +
+                                            "}")))})
+    @GetMapping("/statistic/users/{id}")
+        public ResponseEntity<Map<String, Object>> getManagerStatistics(@PathVariable Integer id){
+        return adminService.getManagerStatistics(id);
     }
 }
