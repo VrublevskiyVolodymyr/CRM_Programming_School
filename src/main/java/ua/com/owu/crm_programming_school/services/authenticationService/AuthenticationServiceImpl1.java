@@ -1,7 +1,6 @@
 package ua.com.owu.crm_programming_school.services.authenticationService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,16 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.*;
 import ua.com.owu.crm_programming_school.services.jwtService.JwtService;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 
 
 @Service

@@ -2,7 +2,6 @@ package ua.com.owu.crm_programming_school.services.usersService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ua.com.owu.crm_programming_school.dao.UserDAO;

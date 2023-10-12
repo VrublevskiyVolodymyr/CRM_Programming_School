@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
@@ -134,26 +133,53 @@ public class OrderServiceImpl1 implements OrderService {
             Group group = groupDAO.findByName(orderEdit.getGroup());
 
             if (isOwner || isManagerNotAssigned) {
-                order.setName(orderEdit.getName());
-                order.setSurname(orderEdit.getSurname());
-                order.setEmail(orderEdit.getEmail());
-                order.setPhone(orderEdit.getPhone());
-                order.setAge(orderEdit.getAge());
-                order.setCourse(orderEdit.getCourse());
-                order.setCourseFormat(orderEdit.getCourseFormat());
-                order.setCourseType(orderEdit.getCourseType());
-                order.setAlreadyPaid(orderEdit.getAlreadyPaid());
-                order.setSum(orderEdit.getSum());
-                order.setMsg(orderEdit.getMsg());
-                order.setStatus(orderEdit.getStatus());
-                order.setUtm(orderEdit.getUtm());
+                if (orderEdit.getName() != null) {
+                    order.setName(orderEdit.getName());
+                }
+                if (orderEdit.getSurname() != null) {
+                    order.setSurname(orderEdit.getSurname());
+                }
+                if (orderEdit.getEmail() != null) {
+                    order.setEmail(orderEdit.getEmail());
+                }
+                if (orderEdit.getPhone() != null) {
+                    order.setPhone(orderEdit.getPhone());
+                }
+                if (orderEdit.getAge() != null) {
+                    order.setAge(orderEdit.getAge());
+                }
+                if (orderEdit.getCourse() != null) {
+                    order.setCourse(orderEdit.getCourse());
+                }
+                if (orderEdit.getCourseFormat() != null) {
+                    order.setCourseFormat(orderEdit.getCourseFormat());
+                }
+                if (orderEdit.getCourseType() != null) {
+                    order.setCourseType(orderEdit.getCourseType());
+                }
+                if (orderEdit.getAlreadyPaid() != null) {
+                    order.setAlreadyPaid(orderEdit.getAlreadyPaid());
+                }
+                if (orderEdit.getSum() != null) {
+                    order.setSum(orderEdit.getSum());
+                }
+                if (orderEdit.getMsg() != null) {
+                    order.setMsg(orderEdit.getMsg());
+                }
+                if (orderEdit.getStatus() != null) {
+                    order.setStatus(orderEdit.getStatus());
+                    if (orderEdit.getStatus().equals("New")) {
+                        order.setManager(null);
+                    } else {
+                        order.setManager(manager);
+                    }
+                }
                 if (group != null) {
                     order.setGroup(group);
-                } else {
+                } else if (orderEdit.getGroup() != null) {
                     Group newGroup = new Group(orderEdit.getGroup());
                     order.setGroup(newGroup);
                 }
-                order.setManager(manager);
 
                 Order savedOrder = orderDAO.save(order);
 

@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 public class UserRequest {
 
     @NotBlank(message = "name is a required field")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
-    @Size(min = 1, max = 2)
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$", message = "Invalid name")
+    @Size(min = 1, max = 20, message = "Max long name 20 character")
     @Schema(description = "User's first name", example = "John")
     private String name;
 
     @NotBlank(message = "name is a required field")
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$")
-    @Size(min = 1, max = 20)
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]+$", message = "Invalid surname")
+    @Size(min = 1, max = 20, message = "Max long surname 20 character")
     @Schema(description = "User's last name", example = "Doe")
     private String surname;
 
