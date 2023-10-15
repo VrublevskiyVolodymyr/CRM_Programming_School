@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.User;
 
+import java.math.BigInteger;
 import java.security.Key;
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +71,27 @@ public class JwtService {
                 .compact();
     }
 
+
+    public String generateActivationToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails
+    ) {
+        return Jwts
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+
+    public String generateActivationToken(UserDetails userDetails) {
+        return generateActivationToken(new HashMap<>(), userDetails);
+    }
+
+
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
@@ -92,6 +115,7 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     public String generateRefreshToken(UserDetails userDetails) {
         return generateRefreshToken(new HashMap<>(), userDetails);
     }
@@ -106,12 +130,16 @@ public class JwtService {
     }
 
     private Date extractExpiration(String token) {
-        return extractClaim(token,Claims::getExpiration);
+        return extractClaim(token, Claims::getExpiration);
     }
 
     public int extractTokenVersion(String jwt) {
         Claims claims = exctarctAllClaims(jwt);
-        return (int) claims.get("tokenVersion", Integer.class);
+        Integer tokenVersion = claims.get("tokenVersion", Integer.class);
+        if (tokenVersion != null) {
+            return tokenVersion.intValue();
+        } else {
+            return 0;
+        }
     }
-
 }

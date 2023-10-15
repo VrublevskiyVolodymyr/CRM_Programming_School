@@ -35,7 +35,7 @@ public class AuthenticationController {
             description = "Activate user",
             responses = {
                     @ApiResponse(description = "success", responseCode = "200"),
-                    @ApiResponse(responseCode = "401", description = "invalid token",
+                    @ApiResponse(responseCode = "400", description = "Token invalid or expired",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class))),
                     @ApiResponse(responseCode = "403", description = "token is dead",
@@ -43,9 +43,9 @@ public class AuthenticationController {
                                     schema = @Schema(implementation = ResponseError.class),
                                     examples = @ExampleObject(name = "errorResponse",
                                             value = "{\"error\": \"token is dead\", \"code\": 403}")))})
-    public void activate(@PathVariable String token,  @RequestBody @Valid Password password) {
+    public ResponseEntity activate(@PathVariable String token,  @RequestBody @Valid Password password) {
 
-        authenticationService.activate(token,password);
+       return authenticationService.activate(token,password);
     }
 
     @PostMapping()

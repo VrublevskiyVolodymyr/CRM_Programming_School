@@ -8,7 +8,7 @@ import ua.com.owu.crm_programming_school.models.RequestRefresh;
 import ua.com.owu.crm_programming_school.models.TokenObtainPair;
 
 public interface AuthenticationService {
-    public void activate(String token, Password password);
+    public ResponseEntity activate(String token, Password password);
 
     public ResponseEntity<AuthenticationResponse> authenticate(TokenObtainPair tokenObtainPair);
 

@@ -9,8 +9,9 @@ import ua.com.owu.crm_programming_school.models.TokenObtainPair;
 
 public class AuthenticationServiceImpl2 implements AuthenticationService{
     @Override
-    public void activate(String token, Password password) {
+    public ResponseEntity activate(String token, Password password) {
 
+        return null;
     }
 
     @Override

@@ -31,12 +31,17 @@ public class AuthenticationServiceImpl1 implements AuthenticationService {
     private AuthenticationManager authenticationManager;
 
 
-    public void activate(String token, Password password) {
-        String username = jwtService.extractUsername(token);
+    public ResponseEntity<String> activate(String activationToken, Password password) {
+        String username = jwtService.extractUsername(activationToken);
         User user = userDAO.findByEmail(username);
-        user.setIs_active(true);
-        user.setPassword(passwordEncoder.encode(password.getPassword()));
-        userDAO.save(user);
+        if (user.getActivationToken()!=null && user.getActivationToken().equals(activationToken)) {
+            user.setIs_active(true);
+            user.setActivationToken(null);
+            user.setPassword(passwordEncoder.encode(password.getPassword()));
+            userDAO.save(user);
+        } else  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<AuthenticationResponse> authenticate(TokenObtainPair tokenObtainPair) {

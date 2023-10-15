@@ -99,7 +99,9 @@ public class User implements UserDetails {
     @Hidden
     private int tokenVersion = 0;
 
-
+    @JsonView(value = Views.Level1.class)
+    @Hidden
+    private String activationToken;
 
     public User(String name, String surname, String email) {
         this.name = name;

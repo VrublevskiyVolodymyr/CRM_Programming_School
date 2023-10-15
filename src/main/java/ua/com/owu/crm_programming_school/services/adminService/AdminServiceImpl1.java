@@ -84,11 +84,14 @@ public class AdminServiceImpl1 implements AdminService {
     @Override
     public ResponseEntity<ResponseAccess> requestToken(Integer id) {
         User user = userDAO.findById(id).get();
-        String accessToken = jwtService.generateToken(user);
+        String activationToken = jwtService.generateActivationToken(user);
+
+        user.setActivationToken(activationToken);
+        userDAO.save(user);
 
         ResponseAccess response = ResponseAccess
                 .builder()
-                .access(accessToken)
+                .access(activationToken)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);

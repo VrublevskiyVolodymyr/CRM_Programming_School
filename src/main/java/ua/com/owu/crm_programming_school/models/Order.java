@@ -1,5 +1,7 @@
 package ua.com.owu.crm_programming_school.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -7,6 +9,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ua.com.owu.crm_programming_school.filter.EmptyStringFilter;
 import ua.com.owu.crm_programming_school.views.Views;
 
 import java.time.LocalDateTime;
@@ -91,6 +94,8 @@ public class Order {
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private Integer sum;
 
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = EmptyStringFilter.class)
     @Column(name = "msg", nullable = true)
     @Schema(description = "User's message", example = "Thank you for registration!")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
@@ -112,6 +117,7 @@ public class Order {
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})
     private LocalDateTime created;
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = EmptyStringFilter.class)
     @Column(name = "utm", nullable = true)
     @Schema(description = "Order's UTM parameter", example = "utm_source=google&utm_medium=cpc")
     @JsonView(value = {Views.Level1.class, Views.Level2.class, Views.Level3.class})

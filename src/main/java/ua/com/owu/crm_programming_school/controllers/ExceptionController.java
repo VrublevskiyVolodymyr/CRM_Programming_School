@@ -59,12 +59,12 @@ public class ExceptionController {
     public ResponseEntity<String> exceptionHandler(ExpiredJwtException  expiredJwtException, HttpServletResponse response) {
 
         response.setHeader("TokenError", "Invalid token");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         ResponseError responseError = ResponseError
                 .builder()
-                .error("Invalid token")
-                .code(401)
+                .error("Token invalid or expired")
+                .code(400)
                 .build();
         try {
             response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
@@ -73,8 +73,9 @@ public class ExceptionController {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
 
     @ExceptionHandler(AuthenticationException.class )
     public ResponseEntity<String> exceptionHandler(AuthenticationException authenticationException, HttpServletResponse response) {
