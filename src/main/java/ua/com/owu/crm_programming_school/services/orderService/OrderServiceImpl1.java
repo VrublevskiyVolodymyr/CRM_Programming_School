@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
@@ -205,7 +206,7 @@ public class OrderServiceImpl1 implements OrderService {
     }
 
     @Override
-    public ResponseEntity<List<Comment>> createComment(Integer orderId, CommentRequest commentRequest, Principal principal) {
+    public ResponseEntity<Comment> createComment(Integer orderId, CommentRequest commentRequest, Principal principal) {
         Order order = null;
         if (orderId > 0) {
             order = orderDAO.findById(Long.valueOf(orderId)).get();
@@ -233,9 +234,11 @@ public class OrderServiceImpl1 implements OrderService {
                     if ("New".equals(status) || status == null) {
                         order.setStatus("In work");
                     }
-                    orderDAO.save(order);
+                    Order savedOrder = orderDAO.save(order);
+                    int lastIndex = savedOrder.getComments().size() - 1;
+                    Comment savedComment = savedOrder.getComments().get(lastIndex);
 
-                    return new ResponseEntity<>(comments, HttpStatus.OK);
+                    return new ResponseEntity<>(savedComment, HttpStatus.OK);
                 }
                 return new ResponseEntity<>(null, HttpStatus.valueOf("You cannot do it"));
             }

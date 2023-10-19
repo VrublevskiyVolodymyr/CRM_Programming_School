@@ -22,7 +22,7 @@ public interface OrderService {
 
     ResponseEntity<List<Comment>> getComments(Integer orderId);
 
-    ResponseEntity<List<Comment>> createComment(Integer orderId, CommentRequest commentRequest, Principal principal);
+    ResponseEntity<Comment> createComment(Integer orderId, CommentRequest commentRequest, Principal principal);
 
     ResponseEntity<byte[]> getFilteredOrdersExcel(Integer page, String order, Integer size, String name, String surname, String email, String phone, Integer age, String course, String courseFormat, String courseType, Integer alreadyPaid, String group, Integer sum, String status, String manager, String my, LocalDate startDate, LocalDate endDate, Principal principal);
 }

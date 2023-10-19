@@ -37,7 +37,7 @@ public class OrderServiceImpl2 implements OrderService{
     }
 
     @Override
-    public ResponseEntity<List<Comment>> createComment(Integer orderId, CommentRequest commentRequest, Principal principal) {
+    public ResponseEntity<Comment> createComment(Integer orderId, CommentRequest commentRequest, Principal principal) {
         return null;
     }
 

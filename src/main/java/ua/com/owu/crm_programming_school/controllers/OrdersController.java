@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import ua.com.owu.crm_programming_school.models.*;
@@ -19,7 +18,6 @@ import ua.com.owu.crm_programming_school.views.Views;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -218,13 +216,13 @@ public class OrdersController {
                             responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CommentListResponse.class))),
+                                    schema = @Schema(implementation = CommentResponse.class))),
                     @ApiResponse(responseCode = "400", description = "Bad Request",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = String.class)))})
     @PostMapping("/{order_id}/comments")
     @JsonView(Views.Level3.class)
-    public ResponseEntity<List<Comment>> createComment(@PathVariable Integer order_id, @RequestBody CommentRequest commentRequest, Principal principal) {
+    public ResponseEntity<Comment> createComment(@PathVariable Integer order_id, @RequestBody CommentRequest commentRequest, Principal principal) {
         return orderService.createComment(order_id, commentRequest, principal);
     }
 }
