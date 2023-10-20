@@ -134,40 +134,40 @@ public class OrderServiceImpl1 implements OrderService {
             Group group = groupDAO.findByName(orderEdit.getGroup());
 
             if (isOwner || isManagerNotAssigned) {
-                if (orderEdit.getName() != null) {
+                if (orderEdit.getName() != null && !orderEdit.getName().isEmpty()) {
                     order.setName(orderEdit.getName());
                 }
-                if (orderEdit.getSurname() != null) {
+                if (orderEdit.getSurname() != null && !orderEdit.getSurname().isEmpty()) {
                     order.setSurname(orderEdit.getSurname());
                 }
-                if (orderEdit.getEmail() != null) {
+                if (orderEdit.getEmail() != null && !orderEdit.getEmail().isEmpty()) {
                     order.setEmail(orderEdit.getEmail());
                 }
-                if (orderEdit.getPhone() != null) {
+                if (orderEdit.getPhone() != null && !orderEdit.getPhone().isEmpty()) {
                     order.setPhone(orderEdit.getPhone());
                 }
-                if (orderEdit.getAge() != null) {
+                if (orderEdit.getAge() != null ) {
                     order.setAge(orderEdit.getAge());
                 }
-                if (orderEdit.getCourse() != null) {
+                if (orderEdit.getCourse() != null && !orderEdit.getCourse().isEmpty()) {
                     order.setCourse(orderEdit.getCourse());
                 }
-                if (orderEdit.getCourseFormat() != null) {
+                if (orderEdit.getCourseFormat() != null && !orderEdit.getCourseFormat().isEmpty()) {
                     order.setCourseFormat(orderEdit.getCourseFormat());
                 }
-                if (orderEdit.getCourseType() != null) {
+                if (orderEdit.getCourseType() != null && !orderEdit.getCourseType().isEmpty()) {
                     order.setCourseType(orderEdit.getCourseType());
                 }
-                if (orderEdit.getAlreadyPaid() != null) {
+                if (orderEdit.getAlreadyPaid() != null ) {
                     order.setAlreadyPaid(orderEdit.getAlreadyPaid());
                 }
                 if (orderEdit.getSum() != null) {
                     order.setSum(orderEdit.getSum());
                 }
-                if (orderEdit.getMsg() != null) {
+                if (orderEdit.getMsg() != null && !orderEdit.getMsg().isEmpty()) {
                     order.setMsg(orderEdit.getMsg());
                 }
-                if (orderEdit.getStatus() != null) {
+                if (orderEdit.getStatus() != null && !orderEdit.getStatus().isEmpty()) {
                     order.setStatus(orderEdit.getStatus());
                     if (orderEdit.getStatus().equals("New")) {
                         order.setManager(null);
@@ -175,9 +175,9 @@ public class OrderServiceImpl1 implements OrderService {
                         order.setManager(manager);
                     }
                 }
-                if (group != null) {
+                if (group != null ) {
                     order.setGroup(group);
-                } else if (orderEdit.getGroup() != null) {
+                } else if (orderEdit.getGroup() != null && !orderEdit.getGroup().isEmpty()) {
                     Group newGroup = new Group(orderEdit.getGroup());
                     order.setGroup(newGroup);
                 }
@@ -234,6 +234,7 @@ public class OrderServiceImpl1 implements OrderService {
                     if ("New".equals(status) || status == null) {
                         order.setStatus("In work");
                     }
+
                     Order savedOrder = orderDAO.save(order);
                     int lastIndex = savedOrder.getComments().size() - 1;
                     Comment savedComment = savedOrder.getComments().get(lastIndex);

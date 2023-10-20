@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -186,7 +187,7 @@ public class OrdersController {
                                             value = "{\"error\": \"One or more fields are not valid\", \"code\": 400, \"details\": {\"courseFormat\": \"Must match the pattern 'static|online|^$'\"}}")))})
     @PatchMapping("/{id}")
     @JsonView(Views.Level3.class)
-    public ResponseEntity<Order> updateOrder(@PathVariable Integer id, @RequestBody OrderEdit orderEdit, Principal principal) {
+    public ResponseEntity<Order> updateOrder(@PathVariable Integer id, @RequestBody  @Valid OrderEdit orderEdit, Principal principal) {
         return orderService.updateOrder(id, orderEdit, principal);
     }
 
