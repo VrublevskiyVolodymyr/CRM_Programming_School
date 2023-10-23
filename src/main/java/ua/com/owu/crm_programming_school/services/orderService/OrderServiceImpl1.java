@@ -174,6 +174,9 @@ public class OrderServiceImpl1 implements OrderService {
                     } else {
                         order.setManager(manager);
                     }
+                } else {
+                    order.setManager(manager);
+                    order.setStatus("In work");
                 }
                 if (group != null ) {
                     order.setGroup(group);
