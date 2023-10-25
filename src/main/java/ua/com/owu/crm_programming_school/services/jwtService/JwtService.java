@@ -120,9 +120,12 @@ public class JwtService {
         return generateRefreshToken(new HashMap<>(), userDetails);
     }
 
-    public boolean isTokenValid(String jwt, UserDetails userDetails) {
+    public boolean isTokenValid(String jwt, UserDetails userDetails, User user) {
         String username = extractUsername(jwt);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(jwt));
+        int tokenVersion = extractTokenVersion(jwt);
+        System.out.println("tokenVersion" + tokenVersion);
+        System.out.println("user.getTokenVersion()" + user.getTokenVersion());
+        return (username.equals(userDetails.getUsername()) &&  tokenVersion == user.getTokenVersion() && !isTokenExpired(jwt));
     }
 
     private boolean isTokenExpired(String token) {

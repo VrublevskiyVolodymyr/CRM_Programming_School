@@ -51,11 +51,15 @@ public class JWTFilter extends OncePerRequestFilter {
             String userEmail = jwtService.extractUsername(token);
             User user = userDAO.findByEmail(userEmail);
 
-            if (user != null && user.getTokenVersion() == jwtService.extractTokenVersion(token)) {
+            System.out.println(user);
+            System.out.println("user.getTokenVersion() JWTFilter" + user.getTokenVersion());
+            System.out.println("jwtService.extractTokenVersion(token) JWTFilter" +jwtService.extractTokenVersion(token));
+
+            if (user != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
 
-                if (jwtService.isTokenValid(token, userDetails)) {
+                if (jwtService.isTokenValid(token, userDetails, user)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
@@ -66,6 +70,19 @@ public class JWTFilter extends OncePerRequestFilter {
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authenticationToken);
+                } else {
+                    System.out.println(401);
+                    response.setHeader("TokenError", "invalid token");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+                    ResponseError responseError = ResponseError
+                            .builder()
+                            .error("invalid token")
+                            .code(401)
+                            .build();
+
+                    response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+                    return;
                 }
             }
 

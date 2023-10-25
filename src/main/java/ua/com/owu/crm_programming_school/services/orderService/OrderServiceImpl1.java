@@ -42,7 +42,6 @@ public class OrderServiceImpl1 implements OrderService {
                                                        Integer alreadyPaid, String group, Integer sum, String status, String manager, String my,
                                                        LocalDate startDate, LocalDate endDate, Principal principal) {
         try {
-
             boolean isMy = "true".equalsIgnoreCase(my);
 
             Sort.Direction sortDirection = Sort.Direction.ASC;
