@@ -23,6 +23,9 @@ public class GroupsServiceImpl1 implements GroupsService {
 
     @Override
     public ResponseEntity<Group> createGroup(Group group) {
+        if (group.getName().isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.valueOf("Group name cannot by empty"));
+        }
         List<String> singleGroup = groupDAO.findAll().stream().map(Group::getName).toList();
 
         if (singleGroup.contains(group.getName())) {

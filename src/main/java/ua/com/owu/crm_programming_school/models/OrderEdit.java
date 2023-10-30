@@ -15,48 +15,48 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderEdit {
 
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]*$")
-    @Size( max = 25)
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]*$", message = "Enter a valid name")
+    @Size( max = 25, message = "name can by max 25 symbols")
     @Nullable
     @Schema(description = "User's first name", example = "John")
     private String name;
 
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]*$")
-    @Size( max = 25)
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯЇЁіІё]*$", message = "Enter a valid surname")
+    @Size( max = 25, message = "surname can by max 25 symbols")
     @Nullable
     @Schema(description = "User's last name", example = "Doe")
     private String surname;
 
-    @Email
-    @Size( max = 100)
+    @Email(message = "Enter a valid email address.")
+    @Size( max = 100, message = "email can by max 100 symbols")
     @Nullable
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String email;
 
-    @Pattern(regexp = "^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])*$")
-    @Size( max = 12)
+    @Pattern(regexp = "^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])*$", message = "Enter a valid phone number")
+    @Size( max = 12, message = "phone size max 12")
     @Nullable
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String phone;
 
-    @Min(16)
-    @Max(90)
+    @Min(value = 16, message = "min age 16")
+    @Max(value = 90 , message = "max age 90")
     @Nullable
     @PositiveOrZero
     @Schema(description = "User's age", example = "25")
     private Integer age;
 
-    @Pattern(regexp = "FS|QACX|JCX|JSCX|FE|PCX|^$")
+    @Pattern(regexp = "FS|QACX|JCX|JSCX|FE|PCX|^$", message = "Enter a valid course")
     @Nullable
     @Schema(description = "User's course", example = "QACX")
     private String course;
 
-    @Pattern(regexp = "static|online|^$")
+    @Pattern(regexp = "static|online|^$" , message = "Enter a valid courseFormat.")
     @Nullable
     @Schema(description = "User's course format", example = "online")
     private String courseFormat;
 
-    @Pattern(regexp = "pro|minimal|premium|incubator|vip|^$")
+    @Pattern(regexp = "pro|minimal|premium|incubator|vip|^$", message = "Enter a valid courseType.")
     @Nullable
     @Schema(description = "User's course type", example = "pro")
     private String courseType;
@@ -75,7 +75,7 @@ public class OrderEdit {
     @Schema(description = "User's message", example = "Thank you for registration!")
     private String msg;
 
-    @Pattern(regexp = "In work|New|Agree|Disagree|Dubbing|^$")
+    @Pattern(regexp = "In work|New|Agree|Disagree|Dubbing|^$", message = "Enter a valid status.")
     @Nullable
     @Schema(description = "Order status", example = "New")
     private String status;

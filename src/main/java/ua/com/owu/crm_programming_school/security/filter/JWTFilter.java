@@ -51,10 +51,6 @@ public class JWTFilter extends OncePerRequestFilter {
             String userEmail = jwtService.extractUsername(token);
             User user = userDAO.findByEmail(userEmail);
 
-            System.out.println(user);
-            System.out.println("user.getTokenVersion() JWTFilter" + user.getTokenVersion());
-            System.out.println("jwtService.extractTokenVersion(token) JWTFilter" +jwtService.extractTokenVersion(token));
-
             if (user != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
