@@ -5,8 +5,7 @@ import ua.com.owu.crm_programming_school.models.Order;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+
 
 public class OrderSpecifications {
 
@@ -98,11 +97,23 @@ public class OrderSpecifications {
     public static Specification<Order> filterByStatus(String status) {
         return (root, query, criteriaBuilder) -> {
             if (status == null) {
-                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+                return criteriaBuilder.or(
+                        criteriaBuilder.isNull(root.get("status")),
+                        criteriaBuilder.equal(root.get("status"), "New")
+                );
+            }
+            if ("New".equals(status)) {
+                return criteriaBuilder.or(
+                        criteriaBuilder.isNull(root.get("status")),
+                        criteriaBuilder.equal(root.get("status"), "New")
+                );
             }
             return criteriaBuilder.equal(root.get("status"), status);
         };
     }
+
+
+
 
     public static Specification<Order> filterByAlreadyPaid(Integer alreadyPaid) {
         return (root, query, criteriaBuilder) -> {
