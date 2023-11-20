@@ -97,10 +97,7 @@ public class OrderSpecifications {
     public static Specification<Order> filterByStatus(String status) {
         return (root, query, criteriaBuilder) -> {
             if (status == null) {
-                return criteriaBuilder.or(
-                        criteriaBuilder.isNull(root.get("status")),
-                        criteriaBuilder.equal(root.get("status"), "New")
-                );
+                    return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
             }
             if ("New".equals(status)) {
                 return criteriaBuilder.or(
@@ -111,9 +108,6 @@ public class OrderSpecifications {
             return criteriaBuilder.equal(root.get("status"), status);
         };
     }
-
-
-
 
     public static Specification<Order> filterByAlreadyPaid(Integer alreadyPaid) {
         return (root, query, criteriaBuilder) -> {
