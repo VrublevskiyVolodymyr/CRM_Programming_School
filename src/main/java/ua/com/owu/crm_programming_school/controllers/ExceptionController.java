@@ -10,24 +10,15 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ua.com.owu.crm_programming_school.models.ResponseError;
-
+import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.IOException;
 import java.util.*;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import ua.com.owu.crm_programming_school.models.ResponseError;
 
 @RestControllerAdvice
 public class ExceptionController {
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> exceptionHandler(MethodArgumentNotValidException e){
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-Error-Message", "Not Valid");
-        ResponseEntity<String> response = new ResponseEntity<>(Objects.requireNonNull(e.getFieldError()).getDefaultMessage(),httpHeaders, HttpStatus.BAD_REQUEST);
-        return response;
-    }
-
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> exceptionHandler(HttpMessageNotReadableException e) {
@@ -131,6 +122,23 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ResponseError> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errorMessages = new ArrayList<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String errorMessage = error.getDefaultMessage();
+            errorMessages.add(errorMessage);
+        });
+
+        ResponseError responseError = ResponseError.builder()
+                .error("One or more fields are not valid")
+                .code(HttpStatus.BAD_REQUEST.value())
+                .details(errorMessages)
+                .build();
+
+        return ResponseEntity.badRequest().body(responseError);
+    }
 }
 
 

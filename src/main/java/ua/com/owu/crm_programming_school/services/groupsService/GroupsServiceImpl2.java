@@ -1,5 +1,6 @@
 package ua.com.owu.crm_programming_school.services.groupsService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ua.com.owu.crm_programming_school.models.Group;
@@ -14,7 +15,7 @@ public class GroupsServiceImpl2 implements GroupsService{
     }
 
     @Override
-    public ResponseEntity<Group> createGroup(Group group) {
+    public ResponseEntity<Group> createGroup(Group group, HttpServletResponse response) {
         return null;
     }
 }

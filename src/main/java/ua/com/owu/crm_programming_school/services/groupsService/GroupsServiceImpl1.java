@@ -1,13 +1,17 @@
 package ua.com.owu.crm_programming_school.services.groupsService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.owu.crm_programming_school.dao.GroupDAO;
 import ua.com.owu.crm_programming_school.models.Group;
+import ua.com.owu.crm_programming_school.models.ResponseError;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,14 +26,49 @@ public class GroupsServiceImpl1 implements GroupsService {
     }
 
     @Override
-    public ResponseEntity<Group> createGroup(Group group) {
+    public ResponseEntity<Group> createGroup(Group group, HttpServletResponse response) {
         if (group.getName().isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.valueOf("Group name cannot by empty"));
+
+            response.setHeader("CreateGroupError", "Group is not valid");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+            ResponseError responseError = ResponseError
+                    .builder()
+                    .error("Group name cannot by empty")
+                    .code(400)
+                    .build();
+            try {
+                response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         }
+
         List<String> singleGroup = groupDAO.findAll().stream().map(Group::getName).toList();
 
         if (singleGroup.contains(group.getName())) {
-            return new ResponseEntity<>(null, HttpStatus.valueOf("Group already exists"));
+            response.setHeader("CreateGroupError", "Group is not valid");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+            ResponseError responseError = ResponseError
+                    .builder()
+                    .error("Group already exists")
+                    .code(400)
+                    .build();
+            try {
+                response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+
         } else {
             Group savedGroup = groupDAO.save(new Group(group.getName()));
             return new ResponseEntity<>(savedGroup, HttpStatus.CREATED);

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +52,8 @@ private GroupsService groupsService;
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = Group.class)))})
-    public ResponseEntity<Group> createGroup(@RequestBody @Valid Group group) {
-        return groupsService.createGroup(group);
+    public ResponseEntity<Group> createGroup(@RequestBody @Valid Group group, HttpServletResponse response) {
+        return groupsService.createGroup(group, response);
     }
 
 }
