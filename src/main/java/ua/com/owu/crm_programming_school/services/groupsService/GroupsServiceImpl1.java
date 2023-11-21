@@ -12,6 +12,7 @@ import ua.com.owu.crm_programming_school.models.Group;
 import ua.com.owu.crm_programming_school.models.ResponseError;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,8 +35,9 @@ public class GroupsServiceImpl1 implements GroupsService {
             response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             ResponseError responseError = ResponseError
                     .builder()
-                    .error("Group name cannot by empty")
+                    .error("Group is not valid")
                     .code(400)
+                    .details(Collections.singletonList("Field 'group': Group name cannot by empty."))
                     .build();
             try {
                 response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));
@@ -56,8 +58,9 @@ public class GroupsServiceImpl1 implements GroupsService {
             response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             ResponseError responseError = ResponseError
                     .builder()
-                    .error("Group already exists")
+                    .error("Group is not valid")
                     .code(400)
+                    .details(Collections.singletonList("Field 'group': Group already exists."))
                     .build();
             try {
                 response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseError));

@@ -126,9 +126,11 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errorMessages = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getFieldErrors().forEach((error) -> {
+            String fieldName = error.getField();
             String errorMessage = error.getDefaultMessage();
-            errorMessages.add(errorMessage);
+            String formattedErrorMessage = String.format("Field '%s': %s", fieldName, errorMessage);
+            errorMessages.add(formattedErrorMessage);
         });
 
         ResponseError responseError = ResponseError.builder()
@@ -139,6 +141,7 @@ public class ExceptionController {
 
         return ResponseEntity.badRequest().body(responseError);
     }
+
 }
 
 

@@ -3,6 +3,7 @@ package ua.com.owu.crm_programming_school.controllers;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.com.owu.crm_programming_school.models.Group;
 import ua.com.owu.crm_programming_school.models.GroupListResponse;
+import ua.com.owu.crm_programming_school.models.ResponseError;
 import ua.com.owu.crm_programming_school.services.groupsService.GroupsService;
 
 import java.util.List;
@@ -51,7 +53,15 @@ private GroupsService groupsService;
                             responseCode = "201",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = Group.class)))})
+                                    schema = @Schema(implementation = Group.class))),
+                    @ApiResponse(
+                            description = "Bad request",
+                            responseCode = "400",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseError.class),
+                                    examples = @ExampleObject(value = "{\"error\": \"Group is not valid\", \"code\": 400, \"details\": [\"Field 'group': Group already exists.\"]}")))
+            })
     public ResponseEntity<Group> createGroup(@RequestBody @Valid Group group, HttpServletResponse response) {
         return groupsService.createGroup(group, response);
     }

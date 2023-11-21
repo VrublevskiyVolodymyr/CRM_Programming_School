@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import ua.com.owu.crm_programming_school.dao.UserDAO;
 import ua.com.owu.crm_programming_school.models.User;
 
-import java.math.BigInteger;
 import java.security.Key;
-import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,8 +121,6 @@ public class JwtService {
     public boolean isTokenValid(String jwt, UserDetails userDetails, User user) {
         String username = extractUsername(jwt);
         int tokenVersion = extractTokenVersion(jwt);
-        System.out.println("tokenVersion" + tokenVersion);
-        System.out.println("user.getTokenVersion()" + user.getTokenVersion());
         return (username.equals(userDetails.getUsername()) &&  tokenVersion == user.getTokenVersion() && !isTokenExpired(jwt));
     }
 

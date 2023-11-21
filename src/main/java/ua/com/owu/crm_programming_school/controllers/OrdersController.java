@@ -180,11 +180,15 @@ public class OrdersController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = OrderResponse.class))),
-                    @ApiResponse(responseCode = "400", description = "Bad Request",
-                            content = @Content(mediaType = "application/json",
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request",
+                            content = @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class),
-                                    examples = @ExampleObject(name = "errorResponse",
-                                            value = "{\"error\": \"One or more fields are not valid\", \"code\": 400, \"details\": {\"courseFormat\": \"Must match the pattern 'static|online|^$'\"}}")))})
+                                    examples = @ExampleObject(
+                                            name = "errorResponse",
+                                            value = "{\"error\": \"One or more fields are not valid\", \"code\": 400, \"details\": [\"Field 'age': min age 16\", \"Field 'email': Enter a valid email address.\"]}")))})
     @PatchMapping("/{id}")
     @JsonView(Views.Level3.class)
     public ResponseEntity<Order> updateOrder(@PathVariable Integer id, @RequestBody  @Valid OrderEdit orderEdit, Principal principal) {
