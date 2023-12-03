@@ -148,11 +148,10 @@ public class AdminServiceImpl1 implements AdminService {
     }
 
     @Override
-    public ResponseEntity<UserPaginated> getAll(Integer page) {
+    public ResponseEntity<UserPaginated> getAll(Integer page, Integer size) {
 
         try {
             String sortBy = "id";
-            Integer size = 25;
 
             int totalRecords = (int) userDAO.count();
             int maxPage = (int) Math.ceil((double) totalRecords / size);

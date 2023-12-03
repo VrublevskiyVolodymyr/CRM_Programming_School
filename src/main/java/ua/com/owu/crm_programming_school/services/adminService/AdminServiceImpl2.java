@@ -42,7 +42,7 @@ public class AdminServiceImpl2 implements AdminService {
     }
 
     @Override
-    public ResponseEntity<UserPaginated> getAll(Integer page) {
+    public ResponseEntity<UserPaginated> getAll(Integer page, Integer size) {
         return null;
     }
 

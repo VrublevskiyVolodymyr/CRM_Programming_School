@@ -21,7 +21,7 @@ public interface AdminService {
 
     ResponseEntity<User> unbanManager(Integer id);
 
-    ResponseEntity<UserPaginated> getAll(Integer page);
+    ResponseEntity<UserPaginated> getAll(Integer page, Integer size);
 
     ResponseEntity<Map<String, Object>> getOrderStatistics();
 

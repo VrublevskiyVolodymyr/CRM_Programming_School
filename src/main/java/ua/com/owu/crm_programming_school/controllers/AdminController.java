@@ -21,20 +21,20 @@ import java.util.Map;
 
 
 @RestController
-@Tag(name="admin")
+@Tag(name = "admin")
 @RequestMapping(value = "/admin")
 public class AdminController {
     AdminService adminService;
 
-    public AdminController(@Qualifier("adminServiceImpl1")AdminService adminService) {
+    public AdminController(@Qualifier("adminServiceImpl1") AdminService adminService) {
         this.adminService = adminService;
     }
 
     @PostMapping("/users")
     @Operation(summary = "create new user",
             description = "Create new user",
-            responses = { @ApiResponse(description = "created", responseCode = "201",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+            responses = {@ApiResponse(description = "created", responseCode = "201",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
                     @ApiResponse(responseCode = "400", description = "duplicate email",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseError.class),
@@ -49,10 +49,10 @@ public class AdminController {
     @GetMapping("/users/{id}/re_token")
     @Operation(summary = "get token",
             description = "get some token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpb...",
-            responses = { @ApiResponse(description = "success", responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ResponseAccess.class)))})
+            responses = {@ApiResponse(description = "success", responseCode = "200",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseAccess.class)))})
     public ResponseEntity<ResponseAccess> requestToken(@PathVariable Integer id) {
         return adminService.requestToken(id);
     }
@@ -66,18 +66,18 @@ public class AdminController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = User.class),
-                            examples = @ExampleObject("{\n" +
-                                    "  \"id\": 0,\n" +
-                                    "  \"name\": \"John\",\n" +
-                                    "  \"surname\": \"Doe\",\n" +
-                                    "  \"email\": \"john.doe@example.com\",\n" +
-                                    "  \"is_active\": true,\n" +
-                                    "  \"is_superuser\": true,\n" +
-                                    "  \"is_staff\": true,\n" +
-                                    "  \"createdAt\": \"2023-10-05T18:02:59.024Z\",\n" +
-                                    "  \"updatedAt\": \"2023-10-05T18:02:59.024Z\",\n" +
-                                    "  \"lastLogin\": \"2023-10-05T18:02:59.024Z\"\n" +
-                                    "}"))),
+                                    examples = @ExampleObject("{\n" +
+                                            "  \"id\": 0,\n" +
+                                            "  \"name\": \"John\",\n" +
+                                            "  \"surname\": \"Doe\",\n" +
+                                            "  \"email\": \"john.doe@example.com\",\n" +
+                                            "  \"is_active\": true,\n" +
+                                            "  \"is_superuser\": true,\n" +
+                                            "  \"is_staff\": true,\n" +
+                                            "  \"createdAt\": \"2023-10-05T18:02:59.024Z\",\n" +
+                                            "  \"updatedAt\": \"2023-10-05T18:02:59.024Z\",\n" +
+                                            "  \"lastLogin\": \"2023-10-05T18:02:59.024Z\"\n" +
+                                            "}"))),
                     @ApiResponse(responseCode = "400", description = "Bad Request",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = String.class),
@@ -85,7 +85,7 @@ public class AdminController {
                                             value = "manager not exist or is ADMIN")))})
     @PatchMapping("/users/{id}/ban")
     @JsonView(Views.Level2.class)
-    public ResponseEntity<User> banManager(@PathVariable Integer id){
+    public ResponseEntity<User> banManager(@PathVariable Integer id) {
         return adminService.banManager(id);
     }
 
@@ -105,7 +105,7 @@ public class AdminController {
                                             value = "value not present")))})
     @PatchMapping("/users/{id}/unban")
     @JsonView(Views.Level2.class)
-    public ResponseEntity<User> unbanManager(@PathVariable Integer id){
+    public ResponseEntity<User> unbanManager(@PathVariable Integer id) {
         return adminService.unbanManager(id);
     }
 
@@ -121,8 +121,9 @@ public class AdminController {
     @GetMapping("/users")
     @JsonView(Views.Level2.class)
     public ResponseEntity<UserPaginated> getAll(
-            @RequestParam(defaultValue = "0") int page){
-        return adminService.getAll(page);
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return adminService.getAll(page, size);
     }
 
     @Operation(summary = "get all orders statistic",
@@ -160,7 +161,7 @@ public class AdminController {
                                             "    ]\n" +
                                             "}")))})
     @GetMapping("/statistic/orders")
-    public ResponseEntity<Map<String, Object>> getOrderStatistics(){
+    public ResponseEntity<Map<String, Object>> getOrderStatistics() {
         return adminService.getOrderStatistics();
     }
 
@@ -199,7 +200,7 @@ public class AdminController {
                                             "    ]\n" +
                                             "}")))})
     @GetMapping("/statistic/users/{id}")
-        public ResponseEntity<Map<String, Object>> getManagerStatistics(@PathVariable Integer id){
+    public ResponseEntity<Map<String, Object>> getManagerStatistics(@PathVariable Integer id) {
         return adminService.getManagerStatistics(id);
     }
 }
